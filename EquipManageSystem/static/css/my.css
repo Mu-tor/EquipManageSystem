@@ -1,0 +1,112 @@
+.row{
+    margin: 0px;
+}
+#employmanage li{
+    list-style: none;
+    margin-top: 2px;
+
+}
+#employmanage li a{
+    display: block;
+    padding: 10px 15px;
+    text-decoration: none;
+}#employmanage li a:hover{
+    background: #eee;
+    border-radius: 6px;
+ }
+#employmanage li a:focus{
+    background: #337AB7;
+    border-radius: 6px;
+}
+body{
+    background: #F0F1F6;
+    height:100%;
+}
+.leftside{
+    position:fixed;
+    background: white;
+    height: 100%;
+    overflow: hidden;
+}
+
+.rightside #home .rowchart{
+    background: white;
+    border:1px solid #eeeeee;
+    border-radius: 10px;
+}
+.rightside #home .rowchart>div{
+    padding:15px;
+}
+#emponjob,#empage,#empedu{
+    width: 100%;
+    height:300px;
+    background: #EDEEFF;
+    border-radius: 5px;
+}
+#empedu{
+    background: #FFEFF7;
+}
+#empage{
+    background: #FFF4EE;
+}
+.info div{
+    background: white;
+}
+.info h4{
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eeeeee;
+}
+.info ul {
+    padding:0px;
+}
+.info ul li{
+    list-style: none;
+
+}
+.info a{
+    padding: 8px 0px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+}
+.info .emphasize a{
+    color: coral;
+}
+.info .badge{
+    background: coral;
+    color:white;
+}
+.info a:focus{
+    background: #eee;
+}
+.info span{
+    float:right;
+    color :#E1E1E1;
+}
+.info>div{
+    padding-right:5px;
+    background: #F0F1F6;
+}
+.info>div>div{
+    background: white;
+    /*border:1px solid #2b542c;*/
+    border-radius: 6px;
+    padding: 16px;
+}
+#exit{
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    margin-left:-15px;
+    padding: 0px 15px;
+}
+#exit a{
+    display: block;
+    text-decoration: none;
+    padding:10px;
+
+}
+#exit a:hover{
+    border-radius: 6px;
+    background: #e0e0e0;
+}

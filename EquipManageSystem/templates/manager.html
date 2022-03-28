@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../static/css/bootstrap.css">
+    <script src="../static/js/jquery-3.4.1.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/echarts.min.js"></script>
+    <title>我的首页</title>
+    <style>
+        body{
+            background: #eee;
+        }
+        .header{
+            height: 100px;
+            line-height: 100px;
+            background: white;
+            padding:0 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .header .pull-left{
+            font-size: 2.0em;
+            font-weight: 500;
+        }
+        .header img{
+            float:left;
+            width:50px;
+            margin-top: 25px;
+        }
+        .header .pull-right{
+            position: relative;
+        }
+        .leftside #myicon{
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: orange;
+            border-radius: 50%;
+            left: 120px;
+            /* bottom:20px; */
+            top: 90px;
+            border:2px solid #fff;
+        }
+        .leftside #myicon:after{
+            content: '';
+            position: absolute;
+            left: 3px;
+            top:50%;
+            width: 20px;
+            height: 2px;
+            background: white;
+        }
+        .leftside{
+            background-color: rgb(85, 15, 150);
+            position: absolute;
+            top:0px;
+            bottom:0px;
+            border-right:1px solid #eee;
+        }
+        .title{
+            background: white;
+            padding:15px;
+            font-size: 1.2em;
+        }
+        .rightside{
+            padding:0px;
+            
+        }
+        .rowchart{
+            margin:15px;
+            background: white;
+            border-radius: 5px;
+            padding:15px 15px 15px 0px;
+        }
+        #emponhire,#empedu,#empage,#main,#mainn,#emplace{
+            height:200px;
+            border-radius: 5px;
+        }
+        #emponhire {
+            background-color: rgba(161, 191, 219, 0.445);
+        } 
+        #emponhire:hover {
+           box-shadow: 0 0 15px rgb(175, 175, 175);
+        }
+        #empedu:hover {
+            box-shadow: 0 0 15px rgb(175, 175, 175);
+        }
+        #empage:hover {
+            box-shadow: 0 0 15px rgb(175, 175, 175);
+        }
+        #emplace:hover {
+            box-shadow: 0 0 15px rgb(175, 175, 175);
+        }
+        #emponhire a:hover {
+           color: #00A0FF;
+        }
+        #empedu a:hover {
+            color: #00A0FF;
+        }
+        #empage a:hover {
+            color: #00A0FF;
+        }
+        #emplace a:hover {
+            color: #00A0FF;
+        }
+        #empedu {
+            background-color: rgba(161, 191, 219, 0.445);
+        }
+        #empage {
+            background-color: rgba(161, 191, 219, 0.445);
+        }
+        #emplace {
+            background-color: rgba(161, 191, 219, 0.445);
+        }
+        #main {
+            background-color: rgb(235, 255, 163);
+        }
+        #mainn {
+            background-color: rgb(247, 150, 198);
+        }
+        .two,
+        .one {
+            margin-left: 40px;
+            line-height: 20px;
+        }
+        #myTab {
+            margin-top: 50px;
+        }
+        img {
+            width: 100px;
+            margin-top: 20px;
+            margin-left: 35px;
+        }
+
+        .read {
+            margin-left: 64px;
+            margin-top: 5px;
+            background-color: rgb(81, 81, 245);
+            color: white;
+            border: none;
+        }
+        .pagination {
+            margin-left: 40%;  
+        }
+        th,td {
+            text-align: center;
+        }
+        .Threetemps {
+            cursor: pointer;
+            
+        }
+        .Threetemps img {
+            margin-left: 70px;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 20px;
+        }
+        .Threetemps a {
+            margin-left: 70px;
+            font-size: 20px;
+            text-decoration:none;
+            color: black;
+        }
+    </style>
+</head>
+<body>
+{% include "header.html" %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 leftside">
+            <span id="myicon"></span>
+            <img src="../static/IMG/f42.png" class="img-circle">
+            <div style="text-align: center;margin-top: 5px"><span id="username" style="color: white;"></span></div>
+            <ul id="myTab" class="nav nav-pills nav-stacked">
+                <li class="active">
+                    <a href="#home" data-toggle="tab">
+                         <span class="glyphicon glyphicon-home"></span>&nbsp;我的桌面
+                    </a>
+                </li>
+                <li><a href="#ios" data-toggle="tab">历史记录</a></li>
+                <!-- <li><a href="#shujia" data-toggle="tab">书架</a></li> -->
+                <!-- <li class="submenu">
+                    <a href="#" id="myTabDrop1" data-toggle="collapse" data-target="#demo">我的操作
+                    <b class="caret"></b>
+                    </a>
+                    <ul  id="demo" class="nav nav-pills nav-stacked collapse "> 
+                        <li><a href="#jmeter" data-toggle="tab">借阅操作</a></li>
+                    </ul>
+                </li> -->
+            </ul>
+        </div>
+        <div class="col-sm-10  col-sm-offset-2  rightside">
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="home">
+                    <p class="title">我的桌面</p>
+                    <div class="rowchart">
+                        <div class="chartcontent">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-3 ">
+                                        <!-- <h4>最近阅读类型</h4> -->
+                                        <div id="emponhire" class="Threetemps">
+                                            <img src="../static/IMG/index_wodejilu.png" alt="" >
+                                            <a href="Registerquipment.html">登记器材</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                        <!-- <h4>最近访问标签</h4> -->
+                                        <div id="empedu" class="Threetemps">
+                                            <img src="../static/IMG/index_chakanshenqing.png" alt="">
+                                            <a href="ManagerLookRegist.html">查看申请</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 ">
+                                        <!-- <h4>最近一周阅读</h4> -->
+                                        <div id="empage" class="Threetemps">
+                                            <img src="../static/IMG/index_yiqiyuyue.png" alt="">
+                                            <a href="ProcessApprovals.html">处理审批</a>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <div id="emplace" class="Threetemps">
+                                            <img src="../static/IMG/index_yiqiyuyue.png" alt="">
+                                            <a href="ToBulletinboard.html">发布公告</a>
+                                        </div>
+                                    </div>
+                                </div>                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="ios">
+                    <p class="title">我的收藏</p>
+                    <div class="rowchart">
+                        <div class="chartcontent">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <h4>最近借用</h4>
+                                        <!-- <div id="embook"></div> -->
+                                        <div id="main" style="width: 450px;height:300px;"></div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <h4>最近常用器材</h4>
+                                        <div id="mainn" style="width: 450px;height:300px;"></div>
+                                    </div>                                   
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+                <!-- <div class="tab-pane fade" id="shujia">
+                    <p class="title">图书馆书架</p>
+                    <div class="rowchart">
+                        <div class="chartcontent">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <input type="text" style="width: 300px;margin-left: 350px;border-radius: 5px;">
+                                    <input type="submit" value="搜索" style="background-color: #00A0FF;color: #ffffff;border: none;border-radius: 5px">
+                                </div>
+                                <div class="row">                                   
+                                </div>
+                                <div class="row">
+                                    <p>
+                                        <ul class="pagination">
+                                            <li class="disabled"><a href="#">&laquo;</a></li>
+                                            <li class="active"><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li><a href="#">&raquo;</a></li>
+                                        </ul>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <!-- <div class="tab-pane fade" id="jmeter">
+                    <p class="title">借书列表与还书操作</p>
+                    <div class="rowchart">
+                        <div class="chartcontent">
+                            <div class="container-fluid"> -->
+                                <!-- <div class="row">
+                                    <input type="text" style="width: 300px;margin-left: 350px;border-radius: 5px;margin-bottom: 10px" name="searchBookAndUser">
+                                    <input type="submit" value="搜索" style="background-color: #00A0FF;color: #ffffff;border: none;border-radius: 5px" onclick="bookAndUserSearch()">
+                                    <button onclick="initTakeBookList()">重置</button>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <table border="1" width="600px" height="300px" align="center" cellspacing = "0" >
+                                            <thead>
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>书名</th>
+                                                    <th>作者</th>
+                                                    <th>分类</th>
+                                                    <th>条形码</th>
+                                                    <th>借出日期</th>
+                                                    <th>归还日期</th>
+                                                    <th>状态</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>《朝花夕拾》</td>
+                                                    <td>鲁迅</td>
+                                                    <td>文学</td>
+                                                    <td>12334324343</td>
+                                                    <td>2021-10-30</td>
+                                                    <td>2021-11-1</td>
+                                                    <td style="color: green;text-align: center;font-weight: bold;">在借</td>
+                                                    <td><button>还书</button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <p>
+                                            <ul class="pagination">
+                                                <li class="disabled"><a href="#">&laquo;</a></li>
+                                                <li class="active"><a href="#">1</a></li>
+                                                <li><a href="#">2</a></li>
+                                                <li><a href="#">3</a></li>
+                                                <li><a href="#">4</a></li>
+                                                <li><a href="#">5</a></li>
+                                                <li><a href="#">&raquo;</a></li>
+                                            </ul>                                          
+                                        </p>
+                                    </div>
+                                </div> -->
+                            <!-- </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(".leftside li a:not('.submenu>a')").on("click",function () {
+        $(".leftside li").each(function () {
+            if($(this).hasClass("active")){
+                $(this).removeClass("active")
+            }
+        })
+    })
+     // 基于准备好的dom，初始化echarts实例
+     var myChart = echarts.init(document.getElementById('main'));
+      // 指定图表的配置项和数据
+      option = {
+        title: {
+            text: '',
+            subtext: '',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        },
+        series: [
+            {
+            name: '',
+            type: 'pie',
+            radius: '50%',
+            data: [
+                { value: 5, name: '场地' },
+                { value: 10, name: '器材' },
+
+            ],
+            emphasis: {
+                itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+            }
+        ]
+    };
+      //使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+    var myChartfive = echarts.init(document.getElementById('mainn'));
+    option = {
+    tooltip: {
+        trigger: 'item'
+    },
+    legend: {
+        top: '5%',
+        left: 'center'
+    },
+    series: [
+        {
+        name: '',
+        type: 'pie',
+        radius: ['40%', '70%'],
+        avoidLabelOverlap: false,
+        itemStyle: {
+            borderRadius: 10,
+            borderColor: '#fff',
+            borderWidth: 2
+        },
+        label: {
+            show: false,
+            position: 'center'
+        },
+        emphasis: {
+            label: {
+            show: true,
+            fontSize: '20',
+            fontWeight: 'bold'
+            }
+        },
+        labelLine: {
+            show: false
+        },
+        data: [
+            { value: 1, name: '诺辉 F1-1' },
+            { value: 1, name: '高精度探测仪' },
+            { value: 1, name: '自动钻孔机' },
+            { value: 1, name: '诺辉 F2-2' }
+        ]}
+    ]
+    };
+    myChartfive.setOption(option);
+    function getCookie(cname){
+        var name = cname + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0; i<ca.length; i++) {
+            var c = ca[i].trim();
+            if (c.indexOf(name)==0) { return c.substring(name.length,c.length); }
+        }
+        return "";
+    }
+    $(document).ready(function (){
+        $(".leftside #username").html('欢迎回来，'+"{{ person.admname }}")
+        initBookList();
+        initTakeBookList();
+    })
+</script>
+</body>
+</html>

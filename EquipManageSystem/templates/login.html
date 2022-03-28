@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录/注册</title>
+    <link rel="stylesheet" href="../static/css/test.css">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <script src="../static/js/jquery-3.4.1.min.js"></script>
+    <script src="../static/js/bootstrap.js"></script>
+    <script src="../static/js/canvas-to-blob.js"></script>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
+    </div>
+</div>
+<div class="user">
+    <i class="fa fa-user"></i>
+    <div class="head">account login</div>
+</div>
+<div class="container" style="margin-left: 400px;">
+    <div class="box login">
+        <div class="form-content">
+            <div class="avtar">
+                <div class="pic"><img src="../static/IMG/2 (1).jpg" alt=""></div>
+            </div>
+            <h1>欢迎回来</h1>
+            <form action="/login" class="form" method="post">
+                <div>
+                    <i class="fa fa-user-o"></i>
+                    <input type="text" name="uname" placeholder="用户名">
+                </div>
+                <div>
+                    <i class="fa fa-key"></i>
+                    <input type="password" name="pwd" placeholder="密码">
+                </div>
+                <div><input type="text" class="form-control" name="vcode" placeholder="验证码"
+                            id="uvcode"></div>
+                <div><img src="/vcode" onclick="this.src='/vcode?'+Math.random()"
+                          class="img-responsive vcode form-control"></div>
+                <div class="btn">
+                    <button type="submit">登录</button>
+                </div>
+                <div class="btn">
+                    <button type="button" class="btn-primary" id="check" data-toggle="modal"
+                            data-target="#faceModal">人脸登录
+                    </button>
+                </div>
+            </form>
+            <p class="btn-something">
+                还没有拥有一个账号吗 ? <span class="signupbtn">立即注册</span>
+            </p>
+        </div>
+    </div>
+    <div class="box signup">
+        <div class="form-content">
+            <div class="avtar">
+                <div class="pic"><img src="../static/IMG/1 (1).jpg" alt=""></div>
+            </div>
+            <h1>从这开始</h1>
+            <form action="#" class="form">
+                <div>
+                    <i class="fa fa-user-o"></i>
+                    <input type="text" placeholder="用户名">
+                </div>
+                <div>
+                    <i class="fa fa-envelope-o"></i>
+                    <input type="text" placeholder="邮箱">
+                </div>
+                <div>
+                    <i class="fa fa-key"></i>
+                    <input type="password" placeholder="密码">
+                </div>
+                <div>
+                    <i class="fa fa-key"></i>
+                    <input type="password" placeholder="确认密码">
+                </div>
+                <div><input type="text" class="form-control" name="vcode" placeholder="验证码"
+                            id="uvcode"></div>
+                <div><img src="/vcode" onclick="this.src='/vcode?'+Math.random()"
+                          class="img-responsive vcode form-control"></div>
+                <div class="btn">
+                    <button>注册</button>
+                </div>
+            </form>
+            <p class="btn-something">
+                你已经拥有账号了 ? <span class="loginbtn">登录</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+{# 人脸识别模态框 #}
+<div class="modal fade" id="faceModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">人脸识别</h4>
+            </div>
+            <div class="modal-body">
+                <video id="video" width="1" height="1" controls> {#用于获取摄像头#}
+                </video>
+                <canvas id="canvas" width="500" height="380"></canvas>
+                {#用于获取摄像头#}
+                <p id="result_tag"></p>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+</body>
+<script>
+    let login = document.querySelector(".login");
+    let signup = document.querySelector(".signup");
+
+    let loginbtn = document.querySelector(".loginbtn");
+    let siginupbtn = document.querySelector(".signupbtn");
+
+    let user = document.querySelector(".head");
+
+    siginupbtn.addEventListener("click", () => {
+        login.style.transform = "rotateY(180deg)"
+        signup.style.transform = "rotateY(0deg)";
+
+        user.innerHTML = "create account"
+    })
+
+    loginbtn.addEventListener("click", () => {
+        login.style.transform = "rotateY(0deg)"
+        signup.style.transform = "rotateY(-180deg)";
+
+        user.innerHTML = "account login"
+    })
+</script>
+<script src="../static/js/login.js"></script>
+{% if info %}
+    <script>
+        let info = "{{ info }}"
+        alert(info)
+    </script>
+{% endif %}
+</html>

@@ -1,0 +1,48 @@
+body{
+    background: #eee;
+}
+.rowheader{
+    height: 70px;
+    margin: 0px;
+}
+.rowheader .empinfo{
+    line-height:70px;
+    padding-right: 20px;
+}
+.rowheader .empinfo>img{
+    float: left;
+    width: 35px;
+    margin-top: 15px;
+}
+.leftside{
+    position: absolute;
+    background: white;
+    bottom: 0px;
+    top:71px;
+}
+/*下拉菜单员工管理*/
+#empmanage{
+    padding:0px;
+}
+#empmanage li{
+    list-style: none;
+}
+#empmanage li a{
+    display: block;
+    text-decoration: none;
+    padding:10px 15px;
+    border-radius:6px;
+}
+
+#empmanage li a:hover{
+    background: #eee;
+}
+#empmanage li a:focus{
+     background: #337ab7;
+}
+/*#home的属性*/
+
+
+#home>h4{
+    background: white;
+}
