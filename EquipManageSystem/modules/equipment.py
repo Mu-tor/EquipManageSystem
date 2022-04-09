@@ -11,6 +11,11 @@ class Equipment(db.Model):  # 器材表
         row = db.session.query(Equipment).filter(Equipment.eqpid == eqpid).first()
         return row
 
+    # 显示所有器材
+    def show_eqp_all(self):
+        row = db.session.query(Equipment).filter().all()
+        return row
+
     # 按器材名找
     def find_eqp_by_name(self, name):
         row = db.session.query(Equipment).filter(Equipment.eqp_name == name).first()

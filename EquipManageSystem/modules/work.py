@@ -20,8 +20,20 @@ class Work(db.Model):  # 事务表
         row = db.session.query(Work).filter(Work.bid == bid).first()
         return row
 
+    # 修改事务状态
+    def update_work(self, wid, isdeal=1):
+        work = self.find_work_by_wid(wid)
+        work.is_deal = isdeal
+        db.session.add(work)
+        db.session.commit()
+
+    # 添加待处理事务
+    def insert_work(self, is_deal, bid):
+        work = Work(is_deal=is_deal, bid=bid)
+        db.session.add(work)
+        db.session.commit()
+
     # 查询所有事务
     def find_all(self):
         row = db.session.query(Work).all()
         return row
-

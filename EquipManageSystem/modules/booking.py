@@ -36,10 +36,10 @@ class Booking(db.Model):  # 预约表
         return row
 
     # 添加
-    def insert_book(self, uid, bro_time, days, is_agree):
-        n = Booking(uid=uid, bro_time=datetime.strptime(bro_time, '%Y-%m-%d').date(),
-                    days=days, is_agree=is_agree)
-        db.session.add(n)
+    def insert_book(self, uid, bro_time, days=1, is_agree=-1):
+        book = Booking(uid=uid, bro_time=datetime.strptime(bro_time, '%Y-%m-%d').date(),
+                       days=days, is_agree=is_agree)
+        db.session.add(book)
         db.session.commit()
 
     # 修改

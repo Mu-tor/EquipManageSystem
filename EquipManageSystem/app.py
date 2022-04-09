@@ -184,8 +184,12 @@ def page_not_found(e):
 if __name__ == '__main__':
     from controller.user import user
     from controller.admin import admin
+    from controller.addr import address
+    from controller.equip import equipment
 
     app.register_blueprint(user, url_prefix='/user')
     app.register_blueprint(admin, url_prefix='/admin')
+    app.register_blueprint(address)
+    app.register_blueprint(equipment)
 
     app.run()

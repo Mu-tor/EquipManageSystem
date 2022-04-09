@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy import MetaData, Table, null
+from sqlalchemy import MetaData, Table
 
 from app import db
 from modules.work import Work
@@ -26,16 +26,21 @@ class Record(db.Model):  # 借用记录表
         row = db.session.query(Record).all();
         return row
 
-    # 添加
-    def insert_rec(self, bid,admid,rtn_date,is_return,remark):
-        n = Record(bid=bid, admid=admid,rtn_date=datetime.strptime(rtn_date, '%Y-%m-%d').date(),
-                    is_return=is_return,remark=remark)
-        db.session.add(n)
+    # 管理员同意预约，添加至预约表,并将待处理事务改为已处理
+    def insert_rec(self, bid, admid, remark, is_return=0):
+        record = Record(bid=bid, admid=admid, is_return=is_return, remark=remark)
+        db.session.add(record)
+        work = Work()
+        row = work.find_work_by_bid(bid)
+        row.is_deal = 1  # 将待处理事务改为已处理
+        db.session.add(row)
         db.session.commit()
 
     # 修改日期和状态
-    def update_rec(self,date,is_return):
-        self.rtn_date=date
-        self.is_return=is_return
+    def update_rec(self, bid, date, remark, is_return=1):
+        rec = self.find_rec_by_bid(bid)
+        rec.rtn_date = datetime.strptime(date, '%Y-%m-%d').date()
+        rec.remark = remark
+        rec.is_return = is_return
+        db.session.add(rec)
         db.session.commit()
-

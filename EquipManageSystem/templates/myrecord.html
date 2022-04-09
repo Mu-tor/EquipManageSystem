@@ -68,7 +68,8 @@
     <div class="row header">
         <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
         <span class="headerspan">我的记录</span>
-        <img src="../static/IMG/nav_close.png" alt="" class="false" onclick="window.location.href='/user/{{ username }}'">
+        <img src="../static/IMG/nav_close.png" alt="" class="false"
+             onclick="window.location.href='/user/{{ username }}'">
     </div>
 
 
@@ -87,23 +88,25 @@
                 </thead>
                 <tbody>
                 {% for record in records %}
-                    <td class="center">{{record.Brodtl.bid}}</td>
-                    {% if record.Brodtl.is_addr == 1 %}
-                        <td class="center">场地</td>
-                        <td class="center">{{ equipment.address }}</td>
-                    {% else %}
-                        <td class="center">器材</td>
-                        <td class="center">{{ equipment.eqp_name }}</td>
-                    {% endif %}
-                    <td class="center">{{record.Brodtl.bro_num}}</td>
-                    <td class="center">{{record.Booking.bro_time}}</td>
-                    {% if record.Booking.is_agree == -1 %}
-                    <td class="center">待审核</td>
-                    {% elif record.Booking.is_agree == 1 %}
-                    <td class="center">{{borrow.rtn_date}}</td>
-                    {% elif record.Booking.is_agree == 0 %}
-                    <td class="center">已被驳回</td>
-                    {% endif %}
+                    <tr class="odd gradeX">
+                        <td class="center">{{ record.Brodtl.bid }}</td>
+                        {% if record.Brodtl.is_addr == 1 %}
+                            <td class="center">场地</td>
+                            <td class="center">{{ equipment.address }}</td>
+                        {% else %}
+                            <td class="center">器材</td>
+                            <td class="center">{{ equipment.eqp_name }}</td>
+                        {% endif %}
+                        <td class="center">{{ record.Brodtl.bro_num }}</td>
+                        <td class="center">{{ record.Booking.bro_time }}</td>
+                        {% if record.Booking.is_agree == -1 %}
+                            <td class="center">待审核</td>
+                        {% elif record.Booking.is_agree == 1 %}
+                            <td class="center">{{ borrow.rtn_date }}</td>
+                        {% elif record.Booking.is_agree == 0 %}
+                            <td class="center">已被驳回</td>
+                        {% endif %}
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>
