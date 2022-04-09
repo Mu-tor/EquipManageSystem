@@ -32,14 +32,14 @@ class Notice(db.Model):  # 公告表
         db.session.commit()
 
     # 修改
-    def update_notice(self,notc):
-        self.notid=notc.notid
-        self.admid=notc.admid
-        self.content=notc.content
+    def update_notice(self, notc):
+        self.notid = notc.notid
+        self.admid = notc.admid
+        self.content = notc.content
         db.session.commit()
 
     # 删除
-    def delete(self,id):
+    def delete(self, id):
         row = Notice().find_notice_by_notid(id)
         db.session.delete(row)
         db.session.commit()

@@ -6,7 +6,7 @@ from app import db
 from modules.work import Work
 
 
-class Brodtl(db.Model):  # 预约表
+class Brodtl(db.Model):  # 预约详情表
     __table__ = Table('t_brodtl', MetaData(bind=db.engine), autoload=True)
 
     def find_book_by_bid(self, bid):
@@ -27,17 +27,16 @@ class Brodtl(db.Model):  # 预约表
         return row
 
     # 添加
-    def insert_bro(self, bid, eqpid, addrid ,is_addr, bro_num):
-        n = Brodtl(bid = bid, eqpid=eqpid, addrid=addrid ,is_addr=is_addr, bro_num=bro_num)
+    def insert_bro(self, bid, eqpid, addrid, is_addr, bro_num):
+        n = Brodtl(bid=bid, eqpid=eqpid, addrid=addrid, is_addr=is_addr, bro_num=bro_num)
         db.session.add(n)
         db.session.commit()
 
     # 修改
-    def update_bro(self,bro):
+    def update_bro(self, bro):
         self.bid = bro.bid
-        self.eqpid=bro.eqpid
-        self.addrid=bro.addrid
-        self.is_addr=bro.is_addr
-        self.bro_num=bro.bro_num
+        self.eqpid = bro.eqpid
+        self.addrid = bro.addrid
+        self.is_addr = bro.is_addr
+        self.bro_num = bro.bro_num
         db.session.commit()
-

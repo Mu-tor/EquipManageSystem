@@ -22,6 +22,6 @@ class Work(db.Model):  # 事务表
 
     # 查询所有事务
     def find_all(self):
-        row = db.session.query(Work).all();
+        row = db.session.query(Work).all()
         return row
 

@@ -3,7 +3,7 @@ from sqlalchemy import Table, MetaData
 from app import db
 
 
-class Equipment(db.Model):  # 场地表
+class Equipment(db.Model):  # 器材表
     __table__ = Table('t_equipment', MetaData(bind=db.engine), autoload=True)
 
     # 按编号找

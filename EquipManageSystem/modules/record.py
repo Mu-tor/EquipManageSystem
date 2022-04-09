@@ -6,7 +6,7 @@ from app import db
 from modules.work import Work
 
 
-class Record(db.Model):  # 预约表
+class Record(db.Model):  # 借用记录表
     __table__ = Table('t_record', MetaData(bind=db.engine), autoload=True)
 
     def find_rec_by_bid(self, bid):
