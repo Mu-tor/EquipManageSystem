@@ -38,7 +38,7 @@ class Booking(db.Model):  # 预约表
 
     # 查询所有预约
     def find_all(self):
-        row = db.session.query(Booking).all();
+        row = db.session.query(Booking).all()
         return row
 
     # 添加

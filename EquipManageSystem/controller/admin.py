@@ -30,8 +30,8 @@ def admin_message_num():  # 待处理事务数
     return len(wait_process())
 
 
-@admin.route('lookrecord', methods=['GET', 'POST'])  # 查看申请
-def admin_lookrecord():
+@admin.route('/approval', methods=['GET', 'POST'])  # 审核
+def admin_approval():
     brotli = Brodtl()
     addr = Address()
     users = Users()
@@ -49,7 +49,7 @@ def admin_lookrecord():
             row = equip.find_eqp_by_id(details.eqpid)
             result.setdefault("equipment", row)
         results.append(result)
-    return render_template("ManagerLookRecord.html", results=results, admin=session.get('admin'))
+    return render_template("ProcessApprovals.html", results=results, admin=session.get('admin'))
 
 
 @admin.before_request
