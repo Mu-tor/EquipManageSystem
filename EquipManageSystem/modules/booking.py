@@ -4,7 +4,6 @@ from sqlalchemy import MetaData, Table, null
 
 from app import db
 from modules.brodtl import Brodtl
-from modules.record import Record
 from modules.users import Users
 from modules.work import Work
 
@@ -20,13 +19,20 @@ class Booking(db.Model):  # 预约表
         row = db.session.query(Booking).filter(Booking.uid == uid).all()
         return row
 
+    def find_waitreturn_by_uid(self, uid):  # 查询用户待还
+        row = self.find_all_by_uid(uid)
+
     def find_all_by_username(self, username):  # 通过用户名查询借用的记录
         row = db.session.query(Booking, Users, Brodtl).join(Users, Users.uid == Booking.uid). \
             join(Brodtl, Brodtl.bid == Booking.bid).filter(
             Users.username == username).all()
         return row
 
-    def find_all_by_isagree(self, is_agree):
+    def find_all_by_isagree_uid(self, is_agree, uid):  # 查询用户是否被同意借用的记录
+        row = db.session.query(Booking).filter(Booking.is_agree == is_agree, Booking.uid == uid).all()
+        return row
+
+    def find_all_by_isagree(self, is_agree):  # 查询所有是否被同意借用的记录
         row = db.session.query(Booking).filter(Booking.is_agree == is_agree).all()
         return row
 

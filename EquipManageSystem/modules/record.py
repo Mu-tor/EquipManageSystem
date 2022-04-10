@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy import MetaData, Table
 
 from app import db
+from modules.booking import Booking
+from modules.users import Users
 from modules.work import Work
 
 
@@ -17,13 +19,14 @@ class Record(db.Model):  # 借用记录表
         row = db.session.query(Record).filter(Record.admid == admid).all()
         return row
 
-    def find_all_by_isrtn(self, isrtn):
-        row = db.session.query(Record).filter(Record.is_return == isrtn).all()
+    def find_all_by_isrtn(self, isrtn, uid):  # 查询用户归还状态
+        row = db.session.query(Record, Booking).join(Booking, Booking.bid == Record.bid) \
+            .join(Users, Users.uid == Booking.uid).filter(Users.uid == uid, Record.is_return == isrtn).all()
         return row
 
     # 查询所有归还记录
     def find_all(self):
-        row = db.session.query(Record).all();
+        row = db.session.query(Record).all()
         return row
 
     # 管理员同意预约，添加至预约表,并将待处理事务改为已处理

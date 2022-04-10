@@ -4,8 +4,17 @@
             <span class="badge" style="background-color: dodgerblue;width: 50px;height: 20px;line-height: 15px;">人脸注册<a
                     href="#" id="register_face"><span class="glyphicon glyphicon-camera"></span></a></span>
         {% endif %}
-        <span class="glyphicon glyphicon-comment one">消息</span><span class="badge">3</span>
-        <span class="glyphicon glyphicon-edit two">任务</span>
+        {% if person.admname %}
+            <a href="/admin/lookrecord">
+            <span class="glyphicon glyphicon-comment one">消息</span><span class="badge">{{ messageNum }}</span>
+            </a>
+        {% else %}
+            <a href="/user/lookrecord">
+                <span class="glyphicon glyphicon-comment one">消息</span><span class="badge">{{ messageNum }}</span>
+            </a>
+        {% endif %}
+        <span class="glyphicon glyphicon-edit two">任务   </span>
+        <a href="/logout"> <span class="glyphicon glyphicon-log-out">退出登录</span></a>
     </div>
 </div>
 

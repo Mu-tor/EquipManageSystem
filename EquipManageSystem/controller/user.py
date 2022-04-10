@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, request
+from flask import Blueprint, render_template, session
 
 from modules.address import Address
 from modules.booking import Booking
@@ -15,7 +15,14 @@ def user_home(name):
     row = users.find_user_by_uname(name)
     is_face = True  # 用户已注册人脸
     session["user"] = row.username
-    return render_template("UserHome.html", person=row, is_face=is_face, info="登陆成功!!")
+    messnum = user_message_num(row.uid)
+    return render_template("UserHome.html", person=row, messageNum=messnum, is_face=is_face, info="登陆成功!!")
+
+
+def user_message_num(uid):  # 根据用户id获取待归还数
+    record = Record()
+    messnum = len(record.find_all_by_isrtn(0, uid))
+    return messnum
 
 
 def get_result():
@@ -46,10 +53,10 @@ def user_record():
     return render_template("myrecord.html", results=results, username=session.get('user'))
 
 
-@user.route('/lookrecode', methods=['get', 'post'])
-def user_lookrecode():
+@user.route('/lookrecord', methods=['get', 'post'])
+def user_lookrecord():
     results = get_result()
-    return render_template("lookrecode.html", results=results, username=session.get('user'))
+    return render_template("lookrecord.html", results=results, username=session.get('user'))
 
 
 @user.before_request
