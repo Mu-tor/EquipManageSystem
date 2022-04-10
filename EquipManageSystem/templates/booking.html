@@ -71,13 +71,13 @@
 <body>
 <div class="container-fluid">
     <div class="row header">
-        <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
+        <div class="col-lg-3"><img src="../static/img/toppic.png" width="300px"></div>
         {% if is_addr == 0 %}
             <span class="headerspan">器材预约</span>
         {% else %}
             <span class="headerspan">场地预约</span>
         {% endif %}
-        <img src="../static/IMG/nav_close.png" alt="" class="false"
+        <img src="../static/img/nav_close.png" alt="" class="false"
              onclick="window.location.href='/user/{{ username }}'">
     </div>
 
@@ -90,32 +90,140 @@
                     <th colspan="1" rowspan="1">名称</th>
                     {% if is_addr == 0 %}
                         <th colspan="1" rowspan="1">剩余数量</th>
+                        <th colspan="1" rowspan="1">借用数量</th>
                     {% else %}
                         <th colspan="1" rowspan="1">位置</th>
+                        <th colspan="1" rowspan="1">借用时间</th>
                     {% endif %}
+                    <th colspan="1" rowspan="1">操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                {% if is_addr == 0 %}
-                    {% for equip in equips %}
+                {% for result in results %}
+                    {% if is_addr == 0 %}
                         <tr class="odd gradeX">
-                            <td class="center">{{ equip.eqpid }}</td>
-                            <td class="center">{{ equip.eqp_name }}</td>
-                            <td class="center">{{ equip.num }}</td>
+                            <td class="center">{{ result["equip"].eqpid }}</td>
+                            <td class="center">{{ result["equip"].eqp_name }}</td>
+                            <td class="center">{{ result["equip"].num }}</td>
+                            <td class="center">
+                                <input type="number" name="broNum" min="1"
+                                       οninput="if(value>{{ result["equip"].num }})value={{ result["equip"].num }}">
+                            </td>
+                            <td class="center">
+                                <a class='fa fa-lg fa-warning text-red' data-toggle="modal"
+                                   data-href="javascript:post('/broEquip',
+                                   {id:{{ result["equip"].eqpid }},name:{{ username }}})"
+                                   data-target="#{{ result["index"] }}-borrow">借用</a>
+                                <!--
+                                           借阅确认--模态框
+                                        -->
+                                <div class="modal fade" id="{{ result["index"] }}-borrow" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                请确认
+                                            </div>
+                                            <div class="modal-body">
+                                                确认借用{{ result["equip"].eqp_name }}吗？
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    取消
+                                                </button>
+                                                <a class="btn btn-danger btn-ok">确认</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-                    {% endfor %}
-                {% else %}
-                    {% for addr in addrs %}
+                    {% else %}
                         <tr class="odd gradeX">
-                            <td class="center">{{ addr.addrid }}</td>
-                            <td class="center">{{ addr.addr_name }}</td>
-                            <td class="center">{{ addr.address }}</td>
+                            <td class="center">{{ result["addr"].addrid }}</td>
+                            <td class="center">{{ result["addr"].addr_name }}</td>
+                            <td class="center">{{ result["addr"].address }}</td>
+                            <td class="center"><input type="date" name="broDate" id="broDate"></td>
+                            <td class="center">
+                                <a class='fa fa-lg fa-warning text-red' data-toggle="modal"
+                                   data-href="javascript:post('MyJsp.jsp','',{id:1,name:'aaa'})"
+                                   data-target="#{{ result["index"] }}-borrow">借用</a>
+                                <!--
+                                           借阅确认--模态框
+                                        -->
+                                <div class="modal fade" id="{{ result["index"] }}-borrow" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                请确认
+                                            </div>
+                                            <div class="modal-body">
+                                                确认借用{{ result["addr"].addr_name }}({{ result["addr"].address }})吗？
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    取消
+                                                </button>
+                                                <a class="btn btn-danger btn-ok">确认</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-                    {% endfor %}
-                {% endif %}
+                    {% endif %}
+                    <script>
+                        $('#{{result["index"]}}-borrow').on('show.bs.modal', function (e) {
+                            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                        });
+                    </script>
+                {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
 </body>
 </html>
+<script>
+    function post(url, params) {
+        var temp = document.createElement("form"); //创建form表单
+        temp.action = url;
+        temp.method = "post";
+        temp.style.display = "none";//表单样式为隐藏
+        for (var item in params) {//初始化表单内部的控件
+            //根据实际情况创建不同的标签元素
+            //href="javascript:post('MyJsp.jsp',{id:1,name:'aaa'})"
+            var opt = document.createElement("input");  //添加input标签
+            opt.type = "text";   //类型为text
+            opt.id = item;      //设置id属性
+            opt.name = item;    //设置name属性
+            opt.value = params[item];   //设置value属性
+            temp.appendChild(opt);
+        }
+
+        document.body.appendChild(temp);
+        temp.submit();
+        return temp;
+    }
+
+    $(function () {
+        //得到当前时间
+        var date_now = new Date();
+        //得到当前年份
+        var year = date_now.getFullYear();
+        //得到当前月份
+        //注：
+        //  1：js中获取Date中的month时，会比当前月份少一个月，所以这里需要先加一
+        //  2: 判断当前月份是否小于10，如果小于，那么就在月份的前面加一个 '0' ， 如果大于，就显示当前月份
+        var month = date_now.getMonth() + 1 < 10 ? "0" + (date_now.getMonth() + 1) : (date_now.getMonth() + 1);
+        //得到当前日子（多少号）
+        var date = date_now.getDate() < 10 ? "0" + date_now.getDate() : date_now.getDate();
+        //设置input标签的max属性
+        $("#broDate").attr("min", year + "-" + month + "-" + date + 1);
+    })
+</script>

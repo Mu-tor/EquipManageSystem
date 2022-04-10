@@ -18,22 +18,38 @@ def user_home(name):
     return render_template("UserHome.html", person=row, is_face=is_face, info="登陆成功!!")
 
 
-@user.route('/myrecord', methods=['get', 'post'])
-def user_record():
-    username = session.get('user')
-    book = Booking()
+def get_result():
+    booking = Booking()
     addr = Address()
     equip = Equipment()
     record = Record()
-    borrow = None
-    records = book.find_all_by_username(username)
-    if records[0].Booking.is_agree == 1:
-        borrow = record.find_rec_by_bid(records[0].Booking.bid)  # 借用记录表，同意借阅
-    if records[0].Brodtl.is_addr == 1:
-        row = addr.find_addr_by_id(records[0].Brodtl.addrid)
-    else:
-        row = equip.find_eqp_by_id(records[0].Brodtl.eqpid)
-    return render_template("myrecord.html", records=records, equipment=row, username=username, borrow=borrow)
+    results = []
+    books = booking.find_all_by_username(session.get('user'))
+    for book in books:
+        result = {"record": book}
+        if book.Booking.is_agree == 1:
+            borrow = record.find_rec_by_bid(book.Booking.bid)  # 借用记录表，同意借阅
+            result.setdefault("borrow", borrow)
+        if book.Brodtl.is_addr == 1:
+            row = addr.find_addr_by_id(book.Brodtl.addrid)
+            result.setdefault("address", row)
+        else:
+            row = equip.find_eqp_by_id(book.Brodtl.eqpid)
+            result.setdefault("equipment", row)
+        results.append(result)
+    return results
+
+
+@user.route('/myrecord', methods=['get', 'post'])
+def user_record():
+    results = get_result()
+    return render_template("myrecord.html", results=results, username=session.get('user'))
+
+
+@user.route('/lookrecode', methods=['get', 'post'])
+def user_lookrecode():
+    results = get_result()
+    return render_template("lookrecode.html", results=results, username=session.get('user'))
 
 
 @user.before_request

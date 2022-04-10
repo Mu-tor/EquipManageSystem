@@ -14,18 +14,22 @@
         margin: 0;
         padding: 0;
     }
-    body { 
+
+    body {
         background-color: rgb(242, 242, 242);
     }
+
     .header {
         background-color: white;
     }
+
     .headerspan {
         margin-left: 270px;
         position: absolute;
         top: 10px;
         font-size: 30px;
     }
+
     .false {
         position: absolute;
         width: 20px;
@@ -34,58 +38,162 @@
         top: 20px;
         cursor: pointer;
     }
+
     .contanier {
         margin-top: 50px;
         width: 100%;
         height: 400px;
         background-color: rgb(255, 255, 255);
         border-radius: 10px;
-        box-shadow: 0 0 15px rgba(175, 175, 175, 0.582) ;
+        box-shadow: 0 0 15px rgba(175, 175, 175, 0.582);
 
     }
+
     table {
         margin-left: 150px;
     }
+
     thead {
         color: #909399;
     }
+
     th {
         border-bottom: 1px solid #f0f0f0;
         padding: 18px 10px;
         width: 200px;
     }
-    
+
 </style>
 <body>
-    <div class="container-fluid">
-        <div class="row header">
-            <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
-            <span class="headerspan">查看申请</span>
-            <img src="../static/IMG/nav_close.png" alt="" class="false" onclick="window.location.href='zhuye.html'">
-        </div> 
+<div class="container-fluid">
+    <div class="row header">
+        <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
+        <span class="headerspan">查看申请</span>
+        <img src="../static/IMG/nav_close.png" alt="" class="false"
+             onclick="window.location.href='/user/{{ username }}'">
+    </div>
 
-        <div class="contanier">
-            <div>
-                <table border="0" cellspacing = "0" >
-                    <thead>
-                        <tr>
-                            <th colspan="1" rowspan="1" >序号</th>
-                            <th colspan="1" rowspan="1">类型</th>
-                            <th colspan="1" rowspan="1" >名称</th>
-                            <th colspan="1" rowspan="1">数量</th>
-                            <th colspan="1" rowspan="1">预约日期</th>
-                            <th colspan="1" rowspan="1">归还日期</th>
+    <div class="contanier">
+        <div>
+            <table border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th colspan="1" rowspan="1">序号</th>
+                    <th colspan="1" rowspan="1">类型</th>
+                    <th colspan="1" rowspan="1">名称</th>
+                    <th colspan="1" rowspan="1">数量</th>
+                    <th colspan="1" rowspan="1">预约日期</th>
+                    <th colspan="1" rowspan="1">状态</th>
+                    <th colspan="1" rowspan="1">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for result in results %}
+                    {% if result["borrow"] and result["borrow"].is_return != 1 or result["borrow"] is undefined %}
+                        <tr class="odd gradeX">
+                            <td class="center">{{ result["record"].Brodtl.bid }}</td>
+                            {% if result["record"].Brodtl.is_addr == 1 %}
+                                <td class="center">场地</td>
+                                <td class="center">{{ result["address"].addr_name }}({{ result["address"].address }})</td>
+                            {% else %}
+                                <td class="center">器材</td>
+                                <td class="center">{{ result["equipment"].eqp_name }}</td>
+                            {% endif %}
+                            <td class="center">{{ result["record"].Brodtl.bro_num }}</td>
+                            <td class="center">{{ result["record"].Booking.bro_time }}</td>
+                            {% if result["record"].Booking.is_agree == -1 %}
+                                <td class="center">待审核</td>
+                                <td class="center">
+                                    <button type="button" data-toggle="modal"
+                                            data-target="#{{ result["record"].Booking.bid }}Modal">取消预约
+                                    </button>
+                                </td>
+                                <!--
+                                           归还确认--模态框
+                                        -->
+                                <div class="modal fade" id="{{ result["record"].Booking.bid }}Modal" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                请确认
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if result["record"].Brodtl.is_addr == 1 %}
+                                                    确认取消{{ result["address"].addr_name }}({{ result["address"].address }})吗？
+                                                {% else %}
+                                                    确认取消{{ result["equipment"].eqp_name }}吗？
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    取消
+                                                </button>
+                                                <a class="btn btn-danger btn-ok">确认</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $('#{{ result["record"].Booking.bid }}Modal').on('show.bs.modal', function (e) {
+                                        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                    });
+                                </script>
+                            {% elif result["record"].Booking.is_agree == 1 %}
+                                <td class="center">待归还</td>
+                                <td class="center">
+                                    <button type="button" data-toggle="modal"
+                                            data-target="#{{ result["borrow"].bid }}Modal">归还
+                                    </button>
+                                </td>
+                                <!--
+                                           归还确认--模态框
+                                        -->
+                                <div class="modal fade" id="{{ result["borrow"].bid }}Modal" tabindex="-1"
+                                     role="dialog"
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                请确认
+                                            </div>
+                                            <div class="modal-body">
+                                                {% if result["record"].Brodtl.is_addr == 1 %}
+                                                    确认归还{{ result["address"].addr_name }}({{ result["address"].address }})吗？
+                                                {% else %}
+                                                    确认归还{{ result["equipment"].eqp_name }}吗？
+                                                {% endif %}
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                    取消
+                                                </button>
+                                                <a class="btn btn-danger btn-ok">确认</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <script>
+                                    $('#{{ result["borrow"].bid }}Modal').on('show.bs.modal', function (e) {
+                                        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                    });
+                                </script>
+                            {% elif result["record"].Booking.is_agree == 0 %}
+                                <td class="center">已被驳回</td>
+                                <td class="center">
+                                    <button type="button" class="btn disabled">无法操作</button>
+                                </td>
+                            {% endif %}
                         </tr>
-                    </thead>
-                   
-                    <tr>
-          
-                    </tr>
-                    <tr>
-                        
-                    </tr>
-                </table>
-            </div>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
+    </div>
+</div>
 </body>
 </html>
