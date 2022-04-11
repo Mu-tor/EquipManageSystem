@@ -1,6 +1,11 @@
-from flask import Blueprint, render_template, session
+import os
+import random
+from datetime import datetime
 
-from common.utility import download
+from flask import Blueprint, render_template, session, make_response, send_from_directory
+
+from app import app
+from common.utility import get_table
 from modules.address import Address
 from modules.admins import Admins
 from modules.booking import Booking
@@ -79,8 +84,11 @@ def download_table():
                 retdate = recd.rtn_date.strftime('%Y-%m-%d')  # 已归还，显示日期
             adm = admins.find_admin_by_id(recd.admid)
             adminname = adm.admname
+        elif result['booking'].is_agree == 0:
+            retdate = "已驳回"
         else:
             retdate = "未审核"
+            adminname = "无"
         data.append(retdate)  # 归还日期
         username = result['user'].username
         if result['user'].is_out == 1:  # 外部人员
@@ -88,7 +96,15 @@ def download_table():
         data.append(username)  # 预约人
         data.append(adminname)  # 处理人
         datalist.append(data)
-    download(datalist)
+    date = datetime.strftime(datetime.now(), '%Y-%m-%d')
+    file_rand = random.randint(1, 99)
+    get_table(datalist, date, file_rand)
+    response = make_response(
+        send_from_directory(os.path.join(app.static_folder, "document"),
+                            f"器材借用记录报表{date}-{file_rand}.xls".encode('utf-8').decode('utf-8'), as_attachment=True))
+    response.headers["Content-Disposition"] = "attachment; filename={}".format(
+        "器材借用记录报表.xls".encode().decode('latin-1'))
+    return response
 
 
 @admin.route('/approval', methods=['GET', 'POST'])  # 审核

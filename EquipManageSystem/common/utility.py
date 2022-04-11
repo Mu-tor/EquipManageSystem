@@ -1,11 +1,11 @@
 import os
 import random
 import string
+
 import xlwt
 
 from PIL import Image, ImageFont, ImageDraw, ImageFilter
 from docx import Document
-from flask import make_response, send_from_directory
 
 from app import app
 
@@ -25,7 +25,7 @@ def get_report(textlist):  # 根据模板生成借用声明
     return doc
 
 
-def get_table(datalist, file_rand):  # 生成记录报表
+def get_table(datalist, date, file_rand):  # 生成记录报表
     length = len(datalist)
     book = xlwt.Workbook()
     sheet = book.add_sheet('借用记录', cell_overwrite_ok=True)
@@ -36,56 +36,47 @@ def get_table(datalist, file_rand):  # 生成记录报表
         data = datalist[i]
         for j in range(0, 8):
             sheet.write(i + 1, j, data[j])  # 插入每个单元格
-    book.save(os.path.join(app.static_folder, "document", f"器材借用记录报表{file_rand}.xls"))
+    book.save(os.path.join(app.static_folder, "document", f"器材借用记录报表{date}-{file_rand}.xls"))
     return book
 
 
-def download(datalist):  # 上传记录表
-    file_rand = random.randint(1, 9999)
-    get_table(datalist, file_rand)
-    # response = make_response(
-    #     send_from_directory(os.path.join(app.static_folder, "document", f"器材借用记录报表{file_rand}.xls"),
-    #                         f"器材借用记录报表{file_rand}.xls".encode('utf-8').decode('utf-8'), as_attachment=True))
-    # response.headers["Content-Disposition"] = "attachment; filename={}".format(
-    #     "器材借用记录报表.xls".encode().decode('latin-1'))
-    # return response
-    return send_from_directory(os.path.join(app.static_folder, "document", f"器材借用记录报表{file_rand}.xls"),
-                               f"器材借用记录报表{file_rand}.xls".encode('utf-8').decode('utf-8'), as_attachment=True)
+def rndColor():
+    '''随机颜色'''
+    return (random.randint(32, 127), random.randint(32, 127), random.randint(32, 127))
 
-    def rndColor():
-        '''随机颜色'''
-        return (random.randint(32, 127), random.randint(32, 127), random.randint(32, 127))
 
-    def gene_text():
-        '''生成4位验证码'''
-        return ''.join(random.sample(string.ascii_letters + string.digits, 4))
+def gene_text():
+    '''生成4位验证码'''
+    return ''.join(random.sample(string.ascii_letters + string.digits, 4))
 
-    def draw_lines(draw, num, width, height):
-        '''划线'''
-        for num in range(num):
-            x1 = random.randint(0, width / 2)
-            y1 = random.randint(0, height / 2)
-            x2 = random.randint(0, width)
-            y2 = random.randint(height / 2, height)
-            draw.line(((x1, y1), (x2, y2)), fill='black', width=1)
 
-    def get_verify_code():
-        '''生成验证码图形'''
-        code = gene_text()
-        # 图片大小120×50
-        width, height = 120, 50
-        # 新图片对象
-        im = Image.new('RGB', (width, height), 'white')
-        # 字体
-        font = ImageFont.truetype('app/static/arial.ttf', 40)
-        # draw对象
-        draw = ImageDraw.Draw(im)
-        # 绘制字符串
-        for item in range(4):
-            draw.text((5 + random.randint(-3, 3) + 23 * item, 5 + random.randint(-3, 3)),
-                      text=code[item], fill=rndColor(), font=font)
-        # 划线
-        draw_lines(draw, 2, width, height)
-        # 高斯模糊
-        im = im.filter(ImageFilter.GaussianBlur(radius=1.5))
-        return im, code
+def draw_lines(draw, num, width, height):
+    '''划线'''
+    for num in range(num):
+        x1 = random.randint(0, width / 2)
+        y1 = random.randint(0, height / 2)
+        x2 = random.randint(0, width)
+        y2 = random.randint(height / 2, height)
+        draw.line(((x1, y1), (x2, y2)), fill='black', width=1)
+
+
+def get_verify_code():
+    '''生成验证码图形'''
+    code = gene_text()
+    # 图片大小120×50
+    width, height = 120, 50
+    # 新图片对象
+    im = Image.new('RGB', (width, height), 'white')
+    # 字体
+    font = ImageFont.truetype('app/static/arial.ttf', 40)
+    # draw对象
+    draw = ImageDraw.Draw(im)
+    # 绘制字符串
+    for item in range(4):
+        draw.text((5 + random.randint(-3, 3) + 23 * item, 5 + random.randint(-3, 3)),
+                  text=code[item], fill=rndColor(), font=font)
+    # 划线
+    draw_lines(draw, 2, width, height)
+    # 高斯模糊
+    im = im.filter(ImageFilter.GaussianBlur(radius=1.5))
+    return im, code
