@@ -14,8 +14,7 @@ from modules.brodtl import Brodtl
 from modules.equipment import Equipment
 from modules.record import Record
 from modules.users import Users
-
-from EquipManageSystem.modules.notice import Notice
+from modules.notice import Notice
 
 admin = Blueprint("admin", __name__)
 
