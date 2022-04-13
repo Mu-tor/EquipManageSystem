@@ -2,7 +2,7 @@ import os
 import random
 from datetime import datetime
 
-from flask import Blueprint, render_template, session, make_response, send_from_directory
+from flask import Blueprint, render_template, session, make_response, send_from_directory, url_for, redirect
 
 from app import app
 from common.utility import get_table
@@ -111,6 +111,19 @@ def admin_approval():
     bookings = wait_process()  # 获取待处理事务
     results = get_details(bookings)
     return render_template("ProcessApprovals.html", results=results, admin=session.get('admin'))
+
+
+@admin.route('/decision/<int:bid>/<string:deci>', methods=['GET', 'POST'])
+def admin_decision(bid, deci):
+    admins = Admins()
+    record = Record()
+    admin_name = session.get('admin')
+    adm = admins.find_admin_by_admnane(admin_name)
+    if deci == 'disagree':
+        record.insert_rec(bid, adm.admid, "驳回", 0, -1)
+    else:
+        record.insert_rec(bid, adm.admid, "同意", 1)
+    return redirect(url_for('admin.admin_approval'))
 
 
 @admin.route('/look_record', methods=['GET', 'POST'])  # 查看所有记录

@@ -106,44 +106,46 @@
                         {% endif %}
                         <td class="center">
                             <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-href='{{ url_for("admin.admin_decision", bid=result["booking"].bid,deci='disagree') }}'
                                     data-target="#{{ result["booking"].bid }}disagree">不同意
                             </button>
-                        <!--
-                                   不同意预约--模态框
-                                -->
-                        <div class="modal fade" id="{{ result["booking"].bid }}disagree" tabindex="-1"
-                             role="dialog"
-                             aria-labelledby="myModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        驳回预约
-                                    </div>
-                                    <div class="modal-body">
-                                        确认驳回 {{ result["user"].username }}的预约吗？
-                                        <br>
-                                        {% if result["details"].is_addr == 1 %}
-                                            [{{ result["address"].addr_name }}({{ result["address"].address }})]
-                                        {% else %}
-                                            [{{ result["equipment"].eqp_name }}]
-                                        {% endif %}
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" data-dismiss="modal">
-                                            取消
-                                        </button>
-                                        <a class="btn btn-danger btn-ok">确认</a>
+                            <!--
+                                       不同意预约--模态框
+                                    -->
+                            <div class="modal fade" id="{{ result["booking"].bid }}disagree" tabindex="-1"
+                                 role="dialog"
+                                 aria-labelledby="myModalLabel"
+                                 aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            驳回预约
+                                        </div>
+                                        <div class="modal-body">
+                                            确认驳回 {{ result["user"].username }}的预约吗？
+                                            <br>
+                                            {% if result["details"].is_addr == 1 %}
+                                                [{{ result["address"].addr_name }}({{ result["address"].address }})]
+                                            {% else %}
+                                                [{{ result["equipment"].eqp_name }}]
+                                            {% endif %}
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                取消
+                                            </button>
+                                            <a class="btn btn-danger btn-ok">确认</a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <script>
-                            $('#{{ result["booking"].bid }}disagree').on('show.bs.modal', function (e) {
-                                $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-                            });
-                        </script>
+                            <script>
+                                $('#{{ result["booking"].bid }}disagree').on('show.bs.modal', function (e) {
+                                    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                });
+                            </script>
                             <button type="button" class="btn btn-success" data-toggle="modal"
+                                    data-href='{{ url_for("admin.admin_decision", bid=result["booking"].bid,deci='agree') }}'
                                     data-target="#{{ result["booking"].bid }}agree">同意
                             </button>
                         </td>

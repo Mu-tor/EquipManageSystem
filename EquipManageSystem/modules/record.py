@@ -29,10 +29,14 @@ class Record(db.Model):  # 借用记录表
         row = db.session.query(Record).all()
         return row
 
-    # 管理员同意预约，添加至预约表,并将待处理事务改为已处理
-    def insert_rec(self, bid, admid, remark, is_return=0):
+    # 管理员同意及驳回预约，添加至预约表,并将待处理事务改为已处理
+    def insert_rec(self, bid, admid, remark, is_agree, is_return=0):
         record = Record(bid=bid, admid=admid, is_return=is_return, remark=remark)
         db.session.add(record)
+        bookings = Booking()
+        book = bookings.find_book_by_bid(bid)
+        book.is_agree = is_agree
+        bookings.update_book(book)
         work = Work()
         row = work.find_work_by_bid(bid)
         row.is_deal = 1  # 将待处理事务改为已处理
