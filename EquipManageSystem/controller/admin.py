@@ -179,7 +179,13 @@ def admin_insert_eqp():
 
 @admin.route('/look_notice', methods=['GET', 'POST'])  # 查看所有公告记录
 def admin_look_notice():
-    results = Notice().find_all()
+    notices = Notice().find_all()
+    results = []
+    for notice in notices:
+        result = {"notice": notice}
+        adm = Admins().find_admin_by_id(notice.admid)
+        result.setdefault("admin", adm)
+        results.append(result)
     return render_template("ToBulletinboard.html", results=results, admin=session.get('admin'))
 
 
