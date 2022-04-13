@@ -59,7 +59,8 @@ class Booking(db.Model):  # 预约表
     # 按预约编号取消预约
     def cancel(self, id):
         row = Booking().find_book_by_bid(id)
-        row.bro_date = null
+        row.is_agree = -2
+        db.session.add(row)
         w = Work().find_work_by_bid(id)
         w.is_deal = 1
         db.session.commit()

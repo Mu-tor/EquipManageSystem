@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template, session
+from datetime import datetime
+
+from flask import Blueprint, render_template, session, redirect, url_for
 
 from modules.address import Address
 from modules.booking import Booking
@@ -7,6 +9,7 @@ from modules.record import Record
 from modules.users import Users
 
 user = Blueprint("user", __name__)
+record = Record()
 
 
 @user.route('/<string:name>', methods=['get', 'post'])  # 人脸登录
@@ -20,7 +23,6 @@ def user_home(name):
 
 
 def user_message_num(uid):  # 根据用户id获取待归还数
-    record = Record()
     messnum = len(record.find_all_by_isrtn(0, uid))
     return messnum
 
@@ -29,7 +31,6 @@ def get_result():
     booking = Booking()
     addr = Address()
     equip = Equipment()
-    record = Record()
     results = []
     books = booking.find_all_by_username(session.get('user'))
     for book in books:
@@ -51,6 +52,19 @@ def get_result():
 def user_record():
     results = get_result()
     return render_template("myrecord.html", results=results, username=session.get('user'))
+
+
+@user.route('/brocancel/<int:bid>', methods=['get', 'post'])
+def user_cancel(bid):
+    booking = Booking()
+    booking.cancel(bid)
+    return redirect(url_for("user.user_lookrecord"))
+
+
+@user.route('/broreturn/<int:bid>', methods=['get', 'post'])
+def user_return(bid):
+    record.update_rec(bid, "归还", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    return redirect(url_for("user.user_lookrecord"))
 
 
 @user.route('/lookrecord', methods=['get', 'post'])

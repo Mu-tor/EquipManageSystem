@@ -110,6 +110,9 @@
                         {% if result["booking"].is_agree == -1 %}
                             <td class="center"><a href="/admin/approval">待审核</a></td>
                             <td class="center">无</td>
+                        {% elif result["booking"].is_agree == -2 %}
+                            <td class="center">用户已取消</td>
+                            <td class="center">无</td>
                         {% else %}
                             {% if result["record"].is_return == 1 %}
                                 <td class="center">{{ result["record"].rtn_date }}</td>

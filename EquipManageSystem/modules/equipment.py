@@ -22,20 +22,20 @@ class Equipment(db.Model):  # 器材表
         return row
 
     # 新增器材
-    def insert_eqp(self, eqp_name,num):
-        neweqp = Equipment(eqp_name=eqp_name,num=num)
+    def insert_eqp(self, eqp_name, num):
+        neweqp = Equipment(eqp_name=eqp_name, num=num)
         db.session.add(neweqp)
         db.session.commit()
 
     # 按名称和数量修改
-    def update_eqp(self, eqp_name,num):
+    def update_eqp(self, eqp_name, num):
         self.eqp_name = eqp_name
-        self.num=num
+        self.num = num
         db.session.add(self)
         db.session.commit()
 
-     # 删除
+    # 删除
     def delete(self, id):
-        row =Equipment().find_eqp_by_id(id)
+        row = Equipment().find_eqp_by_id(id)
         db.session.delete(row)
         db.session.commit()

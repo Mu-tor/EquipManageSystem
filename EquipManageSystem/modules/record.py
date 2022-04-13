@@ -44,9 +44,9 @@ class Record(db.Model):  # 借用记录表
         db.session.commit()
 
     # 修改日期和状态
-    def update_rec(self, bid, date, remark, is_return=1):
+    def update_rec(self, bid, remark, date, is_return=1):
         rec = self.find_rec_by_bid(bid)
-        rec.rtn_date = datetime.strptime(date, '%Y-%m-%d').date()
+        rec.rtn_date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S')
         rec.remark = remark
         rec.is_return = is_return
         db.session.add(rec)

@@ -105,84 +105,93 @@
                                 <td class="center">待审核</td>
                                 <td class="center">
                                     <button type="button" data-toggle="modal"
-                                            data-target="#{{ result["record"].Booking.bid }}Modal">取消预约
+                                            data-href="{{ url_for("user.user_cancel",bid = result["record"].Booking.bid) }}"
+                                            data-target="#{{ result["record"].Booking.bid }}cancel">取消预约
                                     </button>
-                                </td>
-                                <!--
-                                           归还确认--模态框
-                                        -->
-                                <div class="modal fade" id="{{ result["record"].Booking.bid }}Modal" tabindex="-1"
-                                     role="dialog"
-                                     aria-labelledby="myModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                请确认
-                                            </div>
-                                            <div class="modal-body">
-                                                {% if result["record"].Brodtl.is_addr == 1 %}
-                                                    确认取消{{ result["address"].addr_name }}({{ result["address"].address }})吗？
-                                                {% else %}
-                                                    确认取消{{ result["equipment"].eqp_name }}吗？
-                                                {% endif %}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                    取消
-                                                </button>
-                                                <a class="btn btn-danger btn-ok">确认</a>
+                                    <!--
+                                               取消预约--模态框
+                                            -->
+                                    <div class="modal fade" id="{{ result["record"].Booking.bid }}cancel" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="myModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    请确认
+                                                </div>
+                                                <div class="modal-body">
+                                                    {% if result["record"].Brodtl.is_addr == 1 %}
+                                                        确认取消预约{{ result["address"].addr_name }}(
+                                                        {{ result["address"].address }})吗？
+                                                    {% else %}
+                                                        确认取消预约{{ result["equipment"].eqp_name }}吗？
+                                                    {% endif %}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        取消
+                                                    </button>
+                                                    <a class="btn btn-danger btn-ok">确认</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <script>
-                                    $('#{{ result["record"].Booking.bid }}Modal').on('show.bs.modal', function (e) {
-                                        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-                                    });
-                                </script>
+                                    <script>
+                                        $('#{{ result["record"].Booking.bid }}cancel').on('show.bs.modal', function (e) {
+                                            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                        });
+                                    </script>
+                                </td>
                             {% elif result["record"].Booking.is_agree == 1 %}
                                 <td class="center">待归还</td>
                                 <td class="center">
                                     <button type="button" data-toggle="modal"
+                                            data-href="{{ url_for("user.user_return",bid = result["record"].Booking.bid) }}"
                                             data-target="#{{ result["borrow"].bid }}Modal">归还
                                     </button>
-                                </td>
-                                <!--
-                                           归还确认--模态框
-                                        -->
-                                <div class="modal fade" id="{{ result["borrow"].bid }}Modal" tabindex="-1"
-                                     role="dialog"
-                                     aria-labelledby="myModalLabel"
-                                     aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                请确认
-                                            </div>
-                                            <div class="modal-body">
-                                                {% if result["record"].Brodtl.is_addr == 1 %}
-                                                    确认归还{{ result["address"].addr_name }}({{ result["address"].address }})吗？
-                                                {% else %}
-                                                    确认归还{{ result["equipment"].eqp_name }}吗？
-                                                {% endif %}
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                    取消
-                                                </button>
-                                                <a class="btn btn-danger btn-ok">确认</a>
+                                    <!--
+                                               归还确认--模态框
+                                            -->
+                                    <div class="modal fade" id="{{ result["borrow"].bid }}Modal" tabindex="-1"
+                                         role="dialog"
+                                         aria-labelledby="myModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    请确认
+                                                </div>
+                                                <div class="modal-body">
+                                                    {% if result["record"].Brodtl.is_addr == 1 %}
+                                                        确认归还{{ result["address"].addr_name }}(
+                                                        {{ result["address"].address }})吗？
+                                                    {% else %}
+                                                        确认归还{{ result["equipment"].eqp_name }}吗？
+                                                    {% endif %}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                                        取消
+                                                    </button>
+                                                    <a class="btn btn-danger btn-ok">确认</a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <script>
-                                    $('#{{ result["borrow"].bid }}Modal').on('show.bs.modal', function (e) {
-                                        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-                                    });
-                                </script>
+                                    <script>
+                                        $('#{{ result["borrow"].bid }}Modal').on('show.bs.modal', function (e) {
+                                            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                                        });
+                                    </script>
+                                </td>
                             {% elif result["record"].Booking.is_agree == 0 %}
                                 <td class="center">已被驳回</td>
+                                <td class="center">
+                                    <button type="button" class="btn disabled">无法操作</button>
+                                </td>
+                            {% else %}
+                                <td class="center">已被取消</td>
                                 <td class="center">
                                     <button type="button" class="btn disabled">无法操作</button>
                                 </td>

@@ -2,7 +2,6 @@ import os
 import random
 from datetime import datetime
 
-
 from flask import Blueprint, render_template, session, make_response, send_from_directory, url_for, redirect, request
 
 from app import app
@@ -77,15 +76,19 @@ def download_table():
         data.append(result['details'].bro_num)  # 数量
         data.append(result['booking'].bro_time.strftime('%Y-%m-%d'))  # 预约日期
         if result['booking'].is_agree != -1:  # 填加处理人信息和记录表信息
-            recd = record.find_rec_by_bid(result['booking'].bid)
-            if recd.is_return == 0:
-                retdate = "未归还"
+            if result['booking'].is_agree == -2:  # 用户自己取消
+                retdate = "用户已取消"
+                adminname = result['user'].username
             else:
-                retdate = recd.rtn_date.strftime('%Y-%m-%d')  # 已归还，显示日期
-            adm = admins.find_admin_by_id(recd.admid)
-            adminname = adm.admname
-            if result['booking'].is_agree == 0:
-                retdate = "已驳回"
+                recd = record.find_rec_by_bid(result['booking'].bid)    # 查询记录表
+                if recd.is_return == 0:
+                    retdate = "未归还"
+                elif recd.is_return == -1:
+                    retdate = "已驳回"
+                else:
+                    retdate = recd.rtn_date.strftime('%Y-%m-%d')  # 已归还，显示日期
+                adm = admins.find_admin_by_id(recd.admid)
+                adminname = adm.admname
         else:
             retdate = "未审核"
             adminname = "无"
@@ -135,7 +138,7 @@ def admin_look_record():
     bookings = book.find_all()  # 获取所有记录
     results = get_details(bookings)
     for result in results:
-        if result['booking'].is_agree != -1:  # 填加处理人信息和记录表信息
+        if result['booking'].is_agree != -1 and result['booking'].is_agree != -2:  # 填加处理人信息和记录表信息
             recd = record.find_rec_by_bid(result['booking'].bid)
             result.setdefault("record", recd)
             adm = admins.find_admin_by_id(recd.admid)

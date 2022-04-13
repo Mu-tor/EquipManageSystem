@@ -105,10 +105,12 @@
                             {% if result["borrow"].is_return == 1 %}
                                 <td class="center">{{ result["borrow"].rtn_date }}</td>
                             {% else %}
-                                <td class="center">待归还</td>
+                                <td class="center"><a href="{{ url_for("user.user_lookrecord") }}">待归还</a></td>
                             {% endif %}
                         {% elif result["record"].Booking.is_agree == 0 %}
                             <td class="center">已被驳回</td>
+                        {% elif result["record"].Booking.is_agree == -2 %}
+                            <td class="center">已取消</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
