@@ -107,19 +107,18 @@
                         {% else %}
                             <td class="center">{{ result["user"].username }}(内部人员)</td>
                         {% endif %}
-                        {% if result["booking"].is_agree == 1 %}
-                            {% if result["record"].is_return == 1 %}
-                                <td class="center">{{ result["record"].rtn_date }}</td>
-                            {% else %}
-                                <td class="center">未归还</td>
-                            {% endif %}
-                            <td class="center">{{ result["admin"].admname }}</td>
-                        {% elif result["booking"].is_agree == -1 %}
+                        {% if result["booking"].is_agree == -1 %}
                             <td class="center"><a href="/admin/approval">待审核</a></td>
                             <td class="center">无</td>
-                        {% elif result["booking"].is_agree == 0 %}
-                            <td class="center">已驳回</td>
-                            <td class="center">隐藏</td>
+                        {% else %}
+                            {% if result["record"].is_return == 1 %}
+                                <td class="center">{{ result["record"].rtn_date }}</td>
+                            {% elif result["record"].is_return == 0 %}
+                                <td class="center">未归还</td>
+                            {% else %}
+                                <td class="center">已驳回</td>
+                            {% endif %}
+                            <td class="center">{{ result["admin"].admname }}</td>
                         {% endif %}
                     </tr>
                 {% endfor %}
