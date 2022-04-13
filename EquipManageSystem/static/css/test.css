@@ -23,10 +23,10 @@
   
   .box {
     position: absolute;
-    top: 0;
+    top: -80px;
     left: 0;
-    width: 28rem;
-    height: 45rem;
+    width: 35rem;
+    height: 47rem;
     border-radius: 10px;
     cursor: pointer;
     backface-visibility: hidden;
@@ -78,7 +78,7 @@
   
   .container .form-content h1 {
     font-size: 1.6rem;
-    margin-top: -230px;
+    margin-top: -250px;
     position: absolute;
     font-weight:bold;
   }
@@ -93,7 +93,7 @@
   }
   
   .container .form input {
-    width: 16rem;
+    width: 20rem;
     padding: 0.8rem;
     padding-left: 3rem;
     outline: none;
@@ -127,7 +127,7 @@
     outline: none;
     background-color: #0066ff;
     color: #fff;
-    width: 12rem;
+    width: 17rem;
     border-radius: 30px;
     cursor: pointer;
   }
@@ -164,7 +164,8 @@
   }
   
   .user .head {
-    font-size: 1.6rem;
+    margin-top: 150px;
+    font-size: 3rem;
     text-transform: uppercase;
     user-select: none;
     text-shadow: 1px 1px 1px rgba(16, 16, 16, 0.1), 1px 2px 1px rgba(16, 16, 16, 0.1), 1px 3px 1px rgba(16, 16, 16, 0.1), 1px 4px 1px rgba(16, 16, 16, 0.1), 1px 5px 1px rgba(16, 16, 16, 0.1), 1px 6px 1px rgba(16, 16, 16, 0.1), 1px 7px 1px rgba(16, 16, 16, 0.1), 1px 8px 1px rgba(16, 16, 16, 0.1);
