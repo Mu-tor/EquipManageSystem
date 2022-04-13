@@ -72,14 +72,14 @@ def person_login():
     row = users.find_user_by_uname(name)
 
     # 管理员免密登录
-    # row = admins.find_admin_by_admnane(name)  # 删除
-    # session['islogin'] = 'true'  # 删除
-    # session["admin"] = row.admname  # 删除
-    # return render_template("manager.html", person=row, is_face=True, info="登陆成功!!")  # 删除
-    # 用户免密登录
-    session["user"] = row.username  # 删除
+    row = admins.find_admin_by_admnane(name)  # 删除
     session['islogin'] = 'true'  # 删除
-    return render_template("UserHome.html", person=row, is_face=True, info="登陆成功!!")  # 删除
+    session["admin"] = row.admname  # 删除
+    return render_template("manager.html", person=row, is_face=True, info="登陆成功!!")  # 删除
+    # 用户免密登录
+    # session["user"] = row.username  # 删除
+    # session['islogin'] = 'true'  # 删除
+    # return render_template("UserHome.html", person=row, is_face=True, info="登陆成功!!")  # 删除
 
     # if row is None:  # 查询是否为管理员登录
     #     is_adm = 1
