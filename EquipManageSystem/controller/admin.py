@@ -2,7 +2,8 @@ import os
 import random
 from datetime import datetime
 
-from flask import Blueprint, render_template, session, make_response, send_from_directory, url_for, redirect
+
+from flask import Blueprint, render_template, session, make_response, send_from_directory, url_for, redirect, request
 
 from app import app
 from common.utility import get_table
@@ -140,6 +141,28 @@ def admin_look_record():
             adm = admins.find_admin_by_id(recd.admid)
             result.setdefault("admin", adm)
     return render_template("ManagerLookRecord.html", results=results, admin=session.get('admin'))
+
+
+@admin.route('/look_eqp', methods=['GET', 'POST'])  # 查看所有记录
+def admin_look_eqp():
+    results = Equipment().show_eqp_all()
+    return render_template("Registerquipment.html", results=results, admin=session.get('admin'))
+
+
+@admin.route('/delete_eqp/<int:id>', methods=['GET', 'POST'])  # 查看所有记录
+def admin_delete_eqp(id):
+    Equipment().delete(id)
+    return redirect(url_for("admin.admin_look_eqp"))
+
+
+@admin.route('/change', methods=['get', 'POST'])  # 查看所有记录
+def admin_search_eqp():
+    id = request.form.get('id')
+    result = Equipment().find_eqp_by_id(id)
+    name = request.form.get("name")
+    num = request.form.get("num")
+    result.update_eqp(name, num)
+    return redirect(url_for("admin.admin_look_eqp"))
 
 
 @admin.before_request

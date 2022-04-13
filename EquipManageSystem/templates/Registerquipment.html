@@ -14,18 +14,22 @@
         margin: 0;
         padding: 0;
     }
-    body { 
+
+    body {
         background-color: rgb(242, 242, 242);
     }
+
     .header {
         background-color: white;
     }
+
     .headerspan {
         margin-left: 270px;
         position: absolute;
         top: 10px;
         font-size: 30px;
     }
+
     .false {
         position: absolute;
         width: 20px;
@@ -34,61 +38,146 @@
         top: 20px;
         cursor: pointer;
     }
+
     .contanier {
         margin-top: 50px;
         width: 100%;
         height: 400px;
         background-color: rgb(255, 255, 255);
         border-radius: 10px;
-        box-shadow: 0 0 15px rgba(175, 175, 175, 0.582) ;
+        box-shadow: 0 0 15px rgba(175, 175, 175, 0.582);
 
     }
+
     table {
         margin-left: 150px;
     }
+
     thead {
         color: #909399;
     }
+
     th {
         border-bottom: 1px solid #f0f0f0;
         padding: 18px 10px;
         width: 200px;
     }
+
+    .modal-dialog {
+        width: 400px;
+        margin: 32px auto;
+    }
+
+    .modal-body {
+        position: relative;
+        padding: 50px;
+    }
 </style>
 <body>
-    <div class="container-fluid">
-        <div class="row header">
-            <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
-            <span class="headerspan">登记器材</span>
-            <img src="../static/IMG/nav_close.png" alt="" class="false" onclick="window.location.href='zhuye.html'">
-        </div> 
-
-
-        <div class="contanier">
-            <div>
-                <table border="0" cellspacing = "0" >
-                    <thead>
-                        <tr>
-                            <th colspan="1" rowspan="1" >序号</th>
-                            <th colspan="1" rowspan="1">类型</th>
-                            <th colspan="1" rowspan="1" >名称</th>
-                            <th colspan="1" rowspan="1">数量</th>
-                            <th colspan="1" rowspan="1">预约日期</th>
-                            <th colspan="1" rowspan="1">归还日期</th>
-                        </tr>
-                    </thead>
-                   
-                    <tr>
-          
-                    </tr>
-                    <tr>
-                        
-                    </tr>
-                </table>
-            </div>
-        </div>
+<div class="container-fluid">
+    <div class="row header">
+        <div class="col-lg-3"><img src="../static/IMG/toppic.png" width="300px"></div>
+        <span class="headerspan">登记器材</span>
+        <img src="../static/IMG/nav_close.png" alt="" class="false" onclick="window.location.href='/admin/{{ admin }}'">
     </div>
 
-    
+
+    <div class="contanier">
+        <div>
+            <table border="0" cellspacing="0">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>名称</th>
+                    <th>数量</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                {% for result in results %}
+                    <tr>
+                        <td>{{ result.eqpid }}</td>
+                        <td>{{ result.eqp_name }}</td>
+                        <td>{{ result.num }}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-href="{{ url_for('admin.admin_delete_eqp',id=result.eqpid) }}"
+                                    data-target="#{{ result.eqpid }}delete">删除
+                            </button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#{{ result.eqpid }}Modal">修改
+                            </button>
+                        </td>
+                    </tr>
+                    <!--
+                                   删除--模态框
+                                -->
+                    <div class="modal fade" id="{{ result.eqpid }}delete" tabindex="-1"
+                         role="dialog"
+                         aria-labelledby="myModalLabel"
+                         aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    删除器材
+                                </div>
+                                <div class="modal-body">
+                                    确认删除 {{ result.eqp_name }} 吗？
+                                    <br>
+                                    此操作不可撤回！！！
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                                        取消
+                                    </button>
+                                    <a class="btn btn-danger btn-ok">确认</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $('#{{ result.eqpid }}delete').on('show.bs.modal', function (e) {
+                            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+                        });
+                    </script>
+                    <!-- 修改模态框 -->
+                    <div class="modal fade" id="{{ result.eqpid }}Modal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+
+                                <!-- 模态框头部 -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">修改</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+
+                                <!-- 模态框主体 -->
+                                <div class="modal-body">
+                                    <form action="/admin/change" method="post">
+                                        <input type="hidden" id="id" name="id" value="{{ result.eqpid }}">
+                                        <label for="name">器材名：</label><input type="text" id="name"
+                                                                             value="{{ result.eqp_name }}"
+                                                                             name="name"><br>
+                                        <label for="num">数量：</label><input type="text" value="{{ result.num }}" id="num"
+                                                                           style="margin-left: 14px" name="num"><br>
+                                        <input type="submit" class="btn" value="提交" style="float: left;">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal"
+                                                style="float: right;">关闭
+                                        </button>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $('#{{ result.eqpid }}Modal').modal('hide');
+                    </script>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
