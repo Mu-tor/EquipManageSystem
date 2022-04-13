@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="../static/css/foot.css">
     <script src="../static/js/jquery-3.4.1.min.js"></script>
     <script src="../static/js/bootstrap.js"></script>
-    <title>公告栏</title>
+    <title>发布公告栏</title>
     <style>
         * {
             padding: 0;
@@ -22,7 +22,7 @@
         .login-container {
             width: 600px;
             height: 315px;
-            
+
             margin: 0 auto;
             margin-top: 10%;
             border-radius: 15px;
@@ -35,7 +35,7 @@
             height: 315px;
             border-top-left-radius: 15px;
             border-bottom-left-radius: 15px;
-            padding: 60px;
+            padding: 22px;
             background-image: linear-gradient(to bottom right, rgb(118, 76, 163), rgb(92, 103, 211));
         }
         ::-webkit-input-placeholder {
@@ -55,10 +55,9 @@
             display: inline-block;
             height: calc(100% - 120px);
             vertical-align: top;
-            padding: 60px 0;
+            padding: 27px 0;
         }
         .regist-container {
-            margin-left: 200px;
             text-align: center;
             color: #fff;
             font-size: 18px;
@@ -72,10 +71,12 @@
             color: #fff;
             text-align: center;
             position: relative;
-            top: 200px;
+            top: 100px;
+            left: 100px;
         }
-        .action-container a {
+        .action-container button,.action-container a {
             border: 1px solid rgb(237, 221, 22);
+            background-color: rgba(0, 0, 0, 0.185);
             margin-left: 30px;
             padding: 10px;
             display: inline;
@@ -88,29 +89,43 @@
             transition: .2s;
             cursor: pointer;
         }
-        .action-container a:hover {
+        .action-container a{
+            left: 20px;
+        }
+        .action-container button,.action-container a:hover {
             background-color: rgb(237, 221, 22);
             color: rgb(95, 76, 194);
         }
+        table {
+            color: #ffffff;
+        }
+
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="left-container">
-           
+
             <div class="input-container">
-                
-            </div>
-            <div class="message-container">
-                
+                <div class="regist-container " style="float: left">
+                <span class="regist">公告栏</span>
+                </div>
+                <table style="float: left">
+                    <tr>
+                        <th>内容</th>
+                    </tr>
+                    {% for result in results %}
+                        <tr>
+                            <td>{{ result.content }}</td>
+                        </tr>
+
+                    {% endfor %}
+                </table>
             </div>
         </div>
         <div class="right-container">
-            <div class="regist-container">
-                <span class="regist">公告栏</span>
-            </div>
-            <div class="action-container">
-                <a href="index.html">返回</a>
+            <div class="action-container" style="float: left;">
+                <a class="btn " href="/">返回</a>
             </div>
         </div>
     </div>

@@ -15,6 +15,8 @@ from modules.equipment import Equipment
 from modules.record import Record
 from modules.users import Users
 
+from EquipManageSystem.modules.notice import Notice
+
 admin = Blueprint("admin", __name__)
 
 
@@ -149,13 +151,13 @@ def admin_look_eqp():
     return render_template("Registerquipment.html", results=results, admin=session.get('admin'))
 
 
-@admin.route('/delete_eqp/<int:id>', methods=['GET', 'POST'])  # 查看所有记录
+@admin.route('/delete_eqp/<int:id>', methods=['GET', 'POST'])  # 删除
 def admin_delete_eqp(id):
     Equipment().delete(id)
     return redirect(url_for("admin.admin_look_eqp"))
 
 
-@admin.route('/change', methods=['get', 'POST'])  # 查看所有记录
+@admin.route('/change', methods=['get', 'POST'])  # 修改
 def admin_search_eqp():
     id = request.form.get('id')
     result = Equipment().find_eqp_by_id(id)
@@ -163,6 +165,26 @@ def admin_search_eqp():
     num = request.form.get("num")
     result.update_eqp(name, num)
     return redirect(url_for("admin.admin_look_eqp"))
+
+@admin.route('/insert', methods=['get', 'POST'])  # 添加
+def admin_insert_eqp():
+    name = request.form.get("name")
+    num = request.form.get("num")
+    Equipment().insert_eqp(name, num)
+    return redirect(url_for("admin.admin_look_eqp"))
+
+@admin.route('/look_notice', methods=['GET', 'POST'])  # 查看所有公告记录
+def admin_look_notice():
+    results = Notice().find_all()
+    return render_template("ToBulletinboard.html", results=results, admin=session.get('admin'))
+
+@admin.route('/add_notice', methods=['GET', 'POST'])  # 发布公告
+def admin_add_notice():
+    content = request.form.get("content")
+    id=Admins().find_admin_by_admnane(session.get('admin')).admid
+    Notice().insert_notice(id ,content )
+    return redirect(url_for("admin.admin_look_notice"))
+
 
 
 @admin.before_request
