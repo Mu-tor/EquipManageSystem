@@ -54,6 +54,14 @@
         padding: 18px 10px;
         width: 200px;
     }
+    .modal-dialog {
+    width: 400px;
+    margin: 32px auto;
+    }
+    .modal-body {
+        position: relative;
+        padding: 50px;
+    }
 </style>
 <body>
     <div class="container-fluid">
@@ -69,26 +77,58 @@
                 <table border="0" cellspacing = "0" >
                     <thead>
                         <tr>
-                            <th colspan="1" rowspan="1" >序号</th>
-                            <th colspan="1" rowspan="1">类型</th>
-                            <th colspan="1" rowspan="1" >名称</th>
-                            <th colspan="1" rowspan="1">数量</th>
-                            <th colspan="1" rowspan="1">预约日期</th>
-                            <th colspan="1" rowspan="1">归还日期</th>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>数量</th>
+                            <th>操作</th>
                         </tr>
                     </thead>
-                   
-                    <tr>
-          
-                    </tr>
-                    <tr>
-                        
-                    </tr>
+                   {% for result in results %}
+                       <tr>
+                            <td>{{ result.eqpid }}</td>
+                            <td>{{ result.eqp_name }}</td>
+                            <td>{{ result.num }}</td>
+                            <td>
+                                <a class="btn btn-primary" href="{{ url_for('admin.admin_delete_eqp',id=result.eqpid) }}">删除</a>
+                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="Values({{result.eqpid}})">修改</button>
+                            </td>
+                       </tr>
+                    {% endfor %}
                 </table>
             </div>
         </div>
     </div>
+    <!-- 模态框 -->
+  <div class="modal fade" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
 
+        <!-- 模态框头部 -->
+        <div class="modal-header">
+          <h4 class="modal-title">修改</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <!-- 模态框主体 -->
+        <div class="modal-body">
+          <form action="/admin/change">
+              <input  type="hidden" id="id" name="id" value="">
+              <label for="name">器材名：</label><input type="text" id="name" value="111" name="name"><br>
+               <label for="num">数量：</label><input type="text" value="10" id="num" style="margin-left: 14px" name="num"><br>
+              <input type="submit" class="btn" value="提交" style="float: left;">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" style="float: right;">关闭</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
     
 </body>
+<script>
+    $('#myModal').modal('hide');
+    function Values(id){
+        $('#id').val(id)
+    }
+</script>
 </html>
