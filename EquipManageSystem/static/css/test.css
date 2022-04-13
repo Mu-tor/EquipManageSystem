@@ -2,14 +2,13 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-  }
-  
-  body {
-    background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
-  }
+}
 
-  
-  .container {
+body {
+    background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
+}
+
+.container {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -19,9 +18,9 @@
     perspective: 1500px;
     -webkit-perspective: 1500px;
     -moz-perspective: 1500px;
-  }
-  
-  .box {
+}
+
+.box {
     position: absolute;
     top: -80px;
     left: 0;
@@ -32,14 +31,14 @@
     backface-visibility: hidden;
     transition: all 0.5s;
     user-select: none;
-  }
-  
-  .signup {
+}
+
+.signup {
     /* background-color: blue; */
     transform: rotateY(-108deg);
-  }
-  
-  .container .form-content {
+}
+
+.container .form-content {
     position: relative;
     width: 100%;
     height: 100%;
@@ -50,49 +49,49 @@
     box-shadow: 0 0 1px #3399ff;
     border-radius: 30px;
     background-color: #fff;
-  }
-  
-  .container .form-content .avtar {
+}
+
+.container .form-content .avtar {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
-  
-  .container .form-content .avtar .pic {
+}
+
+.container .form-content .avtar .pic {
     position: relative;
     width: 80px;
     height: 80px;
     overflow: hidden;
     border-radius: 50%;
     border: 1px solid #3399ff;
-  }
-  
-  .container .form-content .avtar .pic img {
+}
+
+.container .form-content .avtar .pic img {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-  }
-  
-  .container .form-content h1 {
+}
+
+.container .form-content h1 {
     font-size: 1.6rem;
     margin-top: -250px;
     position: absolute;
-    font-weight:bold;
-  }
-  
-  .container .form {
+    font-weight: bold;
+}
+
+.container .form {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    width:210px;
+    width: 210px;
     margin-top: 20px;
-  }
-  
-  .container .form input {
+}
+
+.container .form input {
     width: 20rem;
     padding: 0.8rem;
     padding-left: 3rem;
@@ -101,26 +100,26 @@
     border-radius: 15px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
     margin: 5px;
-  }
-  
-  .container .form div {
+}
+
+.container .form div {
     position: relative;
-  }
-  
-  .container .form div .fa {
+}
+
+.container .form div .fa {
     position: absolute;
     top: 18px;
     left: 25px;
-  }
-  
-  .container .form .btn {
+}
+
+.container .form .btn {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-  }
-  
-  .container .form .btn button {
+}
+
+.container .form .btn button {
     text-transform: uppercase;
     padding: 8px;
     border: none;
@@ -130,43 +129,43 @@
     width: 17rem;
     border-radius: 30px;
     cursor: pointer;
-  }
-  
-  .container .btn-something {
+}
+
+.container .btn-something {
     color: #888;
     font-size: 14px;
-  }
-  
-  .container .btn-something span {
+}
+
+.container .btn-something span {
     color: #0066ff;
     cursor: pointer;
     font-weight: 500;
-  }
-  
-  svg {
+}
+
+svg {
     position: absolute;
     bottom: 0;
     z-index: -1;
-  }
-  
-  .user {
+}
+
+.user {
     position: absolute;
     top: 16rem;
     left: 5rem;
-  }
-  
-  .user .fa-user {
+}
+
+.user .fa-user {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 5rem;
     color: #0066ff;
-  }
-  
-  .user .head {
+}
+
+.user .head {
     margin-top: 150px;
     font-size: 3rem;
     text-transform: uppercase;
     user-select: none;
     text-shadow: 1px 1px 1px rgba(16, 16, 16, 0.1), 1px 2px 1px rgba(16, 16, 16, 0.1), 1px 3px 1px rgba(16, 16, 16, 0.1), 1px 4px 1px rgba(16, 16, 16, 0.1), 1px 5px 1px rgba(16, 16, 16, 0.1), 1px 6px 1px rgba(16, 16, 16, 0.1), 1px 7px 1px rgba(16, 16, 16, 0.1), 1px 8px 1px rgba(16, 16, 16, 0.1);
-  }
+}
