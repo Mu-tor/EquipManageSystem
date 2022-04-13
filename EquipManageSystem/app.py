@@ -9,6 +9,7 @@ from io import BytesIO
 from flask import Flask, render_template, session, make_response, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:root@127.0.0.1:3306/laboratory?charset=utf8"
@@ -34,6 +35,20 @@ def login():
 @app.route("/model")
 def model():
     return render_template("model.html")
+
+
+@app.route('/look_notice', methods=['GET', 'POST'])  # 查看所有公告记录
+def look_notice():
+    from modules.admins import Admins
+    from modules.notice import Notice
+    notices = Notice().find_all()
+    results = []
+    for notice in notices:
+        result = {"notice": notice}
+        adm = Admins().find_admin_by_id(notice.admid)
+        result.setdefault("admin", adm)
+        results.append(result)
+    return render_template("Bulletinboard.html", results=results)
 
 
 @app.errorhandler(404)
@@ -98,7 +113,8 @@ def person_login():
                 else:  # 管理员登录
                     session["admin"] = row.admname
                     messnum = admin_message_num()
-                    return render_template("manager.html", person=row, messageNum=messnum, is_face=is_face, info="登陆成功!!")
+                    return render_template("manager.html", person=row, messageNum=messnum, is_face=is_face,
+                                           info="登陆成功!!")
             else:
                 return render_template("login.html", info="密码错误!!")
         else:

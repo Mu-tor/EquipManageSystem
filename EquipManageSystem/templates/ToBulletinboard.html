@@ -26,7 +26,7 @@
             margin: 0 auto;
             margin-top: 10%;
             border-radius: 15px;
-            box-shadow: 0 10px 50px 0px rbg(59, 45, 159);
+            box-shadow: 0 10px 50px 0px rgb(59, 45, 159);
             background-color: rgb(95, 76, 194);
         }
         .left-container {
@@ -113,12 +113,12 @@
                 <table style="float: left">
                     <tr>
                         <th>内容</th>
-                        <th>发布管理员编号</th>
+                        <th>发布者</th>
                     </tr>
                     {% for result in results %}
                         <tr>
-                            <td>{{ result.content }}</td>
-                            <td>{{ result.admid }}</td>
+                            <td>{{ result["notice"].content }}</td>
+                            <td>{{ result["admin"].admname }}</td>
                         </tr>
 
                     {% endfor %}

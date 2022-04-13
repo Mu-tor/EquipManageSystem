@@ -2,7 +2,6 @@ import os
 import random
 from datetime import datetime
 
-
 from flask import Blueprint, render_template, session, make_response, send_from_directory, url_for, redirect, request
 
 from app import app
@@ -165,6 +164,7 @@ def admin_search_eqp():
     result.update_eqp(name, num)
     return redirect(url_for("admin.admin_look_eqp"))
 
+
 @admin.route('/insert', methods=['get', 'POST'])  # 添加
 def admin_insert_eqp():
     name = request.form.get("name")
@@ -172,18 +172,25 @@ def admin_insert_eqp():
     Equipment().insert_eqp(name, num)
     return redirect(url_for("admin.admin_look_eqp"))
 
+
 @admin.route('/look_notice', methods=['GET', 'POST'])  # 查看所有公告记录
 def admin_look_notice():
-    results = Notice().find_all()
+    notices = Notice().find_all()
+    results = []
+    for notice in notices:
+        result = {"notice": notice}
+        adm = Admins().find_admin_by_id(notice.admid)
+        result.setdefault("admin", adm)
+        results.append(result)
     return render_template("ToBulletinboard.html", results=results, admin=session.get('admin'))
+
 
 @admin.route('/add_notice', methods=['GET', 'POST'])  # 发布公告
 def admin_add_notice():
     content = request.form.get("content")
-    id=Admins().find_admin_by_admnane(session.get('admin')).admid
-    Notice().insert_notice(id ,content )
+    id = Admins().find_admin_by_admnane(session.get('admin')).admid
+    Notice().insert_notice(id, content)
     return redirect(url_for("admin.admin_look_notice"))
-
 
 
 @admin.before_request
