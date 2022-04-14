@@ -40,3 +40,11 @@ def bro_equip():
     else:
         result = "fail"  # 不可借
     return jsonify({"result": result})
+
+
+@equipment.before_request
+def before():
+    if session.get('islogin') != 'true':
+        return render_template('login.html', info="请先登录或注册！！")
+    else:
+        pass

@@ -210,10 +210,13 @@
                             document.getElementById("{{ result["addr"].addrid }}broAddress").addEventListener("click", function () {
                                 let addrid = '{{ result["addr"].addrid }}'
                                 let broDate = document.getElementById("{{ result["addr"].addrid }}broDate").value
+                                let bTmp = broDate.split("-");
                                 //得到当前时间
                                 let date_now = new Date();
-                                if (date_now > broDate) {
-                                    alert("请选择正确的时间！！");
+                                let bd = new Date(bTmp[0], bTmp[1], bTmp[2]);
+                                if (date_now.getDate() > bd.getDate()) {
+                                    alert("预约时间不能早于当前时间！！");
+                                    window.location.href = '/addressShow'
                                     return;
                                 }
                                 //ajax发送校验
@@ -235,22 +238,6 @@
                                     }
                                 })
                             })
-
-                            document.getElementById("{{ result["addr"].addrid }}broDate").addEventListener("click", function () {
-                                //得到当前时间
-                                var date_now = new Date();
-                                //得到当前年份
-                                var year = date_now.getFullYear();
-                                //得到当前月份
-                                //注：
-                                //  1：js中获取Date中的month时，会比当前月份少一个月，所以这里需要先加一
-                                //  2: 判断当前月份是否小于10，如果小于，那么就在月份的前面加一个 '0' ， 如果大于，就显示当前月份
-                                var month = date_now.getMonth() + 1 < 10 ? "0" + (date_now.getMonth() + 1) : (date_now.getMonth() + 1);
-                                //得到当前日子（多少号）
-                                var date = date_now.getDate() < 10 ? "0" + date_now.getDate() : date_now.getDate();
-                                //设置input标签的max属性
-                                $("#{{ result["addr"].addrid }}broDate").attr("min", year + "-" + month + "-" + date + 1);
-                            })
                         </script>
                     {% endif %}
                 {% endfor %}
@@ -260,26 +247,3 @@
     </div>
 </body>
 </html>
-<script>
-    function post(url, params) {
-        var temp = document.createElement("form"); //创建form表单
-        temp.action = url;
-        temp.method = "post";
-        temp.style.display = "none";//表单样式为隐藏
-        for (var item in params) {//初始化表单内部的控件
-            //根据实际情况创建不同的标签元素
-            //href="javascript:post('MyJsp.jsp',{id:1,name:'aaa'})"
-            var opt = document.createElement("input");  //添加input标签
-            opt.type = "text";   //类型为text
-            opt.id = item;      //设置id属性
-            opt.name = item;    //设置name属性
-            opt.value = params[item];   //设置value属性
-            temp.appendChild(opt);
-        }
-
-        document.body.appendChild(temp);
-        temp.submit();
-        return temp;
-    }
-
-</script>
