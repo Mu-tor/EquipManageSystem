@@ -18,6 +18,7 @@ def user_home(name):
     row = users.find_user_by_uname(name)
     is_face = True  # 用户已注册人脸
     session["user"] = row.username
+    session["uid"] = row.uid
     messnum = user_message_num(row.uid)
     return render_template("UserHome.html", person=row, messageNum=messnum, is_face=is_face, info="登陆成功!!")
 
@@ -63,7 +64,7 @@ def user_cancel(bid):
 
 @user.route('/broreturn/<int:bid>', methods=['get', 'post'])
 def user_return(bid):
-    record.update_rec(bid, "归还", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    record.update_rec(bid, "归还", datetime.now().strftime("%Y-%m-%d"))
     return redirect(url_for("user.user_lookrecord"))
 
 

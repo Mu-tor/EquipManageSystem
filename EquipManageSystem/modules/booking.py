@@ -41,12 +41,21 @@ class Booking(db.Model):  # 预约表
         row = db.session.query(Booking).all()
         return row
 
+    # 查询当前场地当前时间是否已被借用
+    def find_book_by_date_addr(self, date, addrid):
+        # 为 None即为可借
+        row = db.session.query(Booking, Brodtl).join(Brodtl, Brodtl.bid == Booking.bid).filter(
+            Booking.bro_time == date, Brodtl.addrid == addrid,
+            Booking.is_agree == 1).first()
+        return row
+
     # 添加
     def insert_book(self, uid, bro_time, days=1, is_agree=-1):
-        book = Booking(uid=uid, bro_time=datetime.strptime(bro_time, '%Y-%m-%d').date(),
+        book = Booking(uid=uid, bro_time=datetime.strptime(bro_time, '%Y-%m-%d'),
                        days=days, is_agree=is_agree)
         db.session.add(book)
         db.session.commit()
+        return book
 
     # 修改
     def update_book(self, notc):

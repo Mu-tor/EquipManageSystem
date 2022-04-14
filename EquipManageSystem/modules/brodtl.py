@@ -27,7 +27,7 @@ class Brodtl(db.Model):  # 预约详情表
         return row
 
     # 添加
-    def insert_bro(self, bid, eqpid, addrid, is_addr, bro_num):
+    def insert_bro(self, bid, eqpid, addrid, is_addr, bro_num=1):
         n = Brodtl(bid=bid, eqpid=eqpid, addrid=addrid, is_addr=is_addr, bro_num=bro_num)
         db.session.add(n)
         db.session.commit()

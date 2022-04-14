@@ -106,13 +106,12 @@
                             <td class="center">{{ result["equip"].eqp_name }}</td>
                             <td class="center">{{ result["equip"].num }}</td>
                             <td class="center">
-                                <input type="number" name="broNum" min="1"
-                                       οninput="if(value>{{ result["equip"].num }})value={{ result["equip"].num }}">
+                                <input type="number" id="{{ result["equip"].eqpid }}broNum" min="1"
+                                       max="{{ result["equip"].num }}">
                             </td>
                             <td class="center">
                                 <a class='fa fa-lg fa-warning text-red' data-toggle="modal"
-                                   data-href="javascript:post('/broEquip',
-                                   {id:{{ result["equip"].eqpid }},name:{{ username }}})"
+                                   data-href="/broEquip"
                                    data-target="#{{ result["index"] }}-borrow">借用</a>
                                 <!--
                                            借阅确认--模态框
@@ -133,22 +132,52 @@
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                                     取消
                                                 </button>
-                                                <a class="btn btn-danger btn-ok">确认</a>
+                                                <a class="btn btn-danger btn-ok"
+                                                   id="{{ result["equip"].eqpid }}Equipment">确认</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+                        <script>
+                            document.getElementById("{{ result["equip"].eqpid }}Equipment").addEventListener("click", function () {
+                                let eqpid = '{{ result["equip"].eqpid }}'
+                                let broNum = document.getElementById("{{ result["equip"].eqpid }}broNum").value
+                                let num = Number(broNum)
+                                if (broNum == '' || num < 0 || num >{{ result["equip"].num }}) {
+                                    alert("请输入正确的数量！！");
+                                    window.location.href = '/equipmentShow'
+                                    return;
+                                }
+                                //ajax发送校验
+                                $.ajax({
+                                    url: "/broEquip",
+                                    type: "POST",
+                                    dataType: 'json',
+                                    data: {
+                                        "eqpid": eqpid,
+                                        "broNum": broNum
+                                    },
+                                    success: function (data) {
+                                        if (data.result == "fail") {
+                                            alert("{{ result["equip"].eqp_name }}剩余数量不足！！");
+                                        } else {
+                                            alert("借用成功，请等待管理员审核！！");
+                                        }
+                                        window.location.href = '/equipmentShow'
+                                    }
+                                })
+                            })
+                        </script>
                     {% else %}
                         <tr class="odd gradeX">
                             <td class="center">{{ result["addr"].addrid }}</td>
                             <td class="center">{{ result["addr"].addr_name }}</td>
                             <td class="center">{{ result["addr"].address }}</td>
-                            <td class="center"><input type="date" name="broDate" id="broDate"></td>
+                            <td class="center"><input type="date" id="{{ result["addr"].addrid }}broDate"></td>
                             <td class="center">
                                 <a class='fa fa-lg fa-warning text-red' data-toggle="modal"
-                                   data-href="javascript:post('MyJsp.jsp','',{id:1,name:'aaa'})"
                                    data-target="#{{ result["index"] }}-borrow">借用</a>
                                 <!--
                                            借阅确认--模态框
@@ -169,19 +198,61 @@
                                                 <button type="button" class="btn btn-default" data-dismiss="modal">
                                                     取消
                                                 </button>
-                                                <a class="btn btn-danger btn-ok">确认</a>
+                                                <a class="btn btn-danger btn-ok"
+                                                   type="submit" id="{{ result["addr"].addrid }}broAddress">确认</a>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </td>
                         </tr>
+                        <script>
+                            document.getElementById("{{ result["addr"].addrid }}broAddress").addEventListener("click", function () {
+                                let addrid = '{{ result["addr"].addrid }}'
+                                let broDate = document.getElementById("{{ result["addr"].addrid }}broDate").value
+                                //得到当前时间
+                                let date_now = new Date();
+                                if (date_now > broDate) {
+                                    alert("请选择正确的时间！！");
+                                    return;
+                                }
+                                //ajax发送校验
+                                $.ajax({
+                                    url: "/broAddress",
+                                    type: "POST",
+                                    dataType: 'json',
+                                    data: {
+                                        "addrid": addrid,
+                                        "broDate": broDate
+                                    },
+                                    success: function (data) {
+                                        if (data.result == "fail") {
+                                            alert("当天场地已被借用！！");
+                                        } else {
+                                            alert("借用成功，请等待管理员审核！！");
+                                        }
+                                        window.location.href = '/addressShow'
+                                    }
+                                })
+                            })
+
+                            document.getElementById("{{ result["addr"].addrid }}broDate").addEventListener("click", function () {
+                                //得到当前时间
+                                var date_now = new Date();
+                                //得到当前年份
+                                var year = date_now.getFullYear();
+                                //得到当前月份
+                                //注：
+                                //  1：js中获取Date中的month时，会比当前月份少一个月，所以这里需要先加一
+                                //  2: 判断当前月份是否小于10，如果小于，那么就在月份的前面加一个 '0' ， 如果大于，就显示当前月份
+                                var month = date_now.getMonth() + 1 < 10 ? "0" + (date_now.getMonth() + 1) : (date_now.getMonth() + 1);
+                                //得到当前日子（多少号）
+                                var date = date_now.getDate() < 10 ? "0" + date_now.getDate() : date_now.getDate();
+                                //设置input标签的max属性
+                                $("#{{ result["addr"].addrid }}broDate").attr("min", year + "-" + month + "-" + date + 1);
+                            })
+                        </script>
                     {% endif %}
-                    <script>
-                        $('#{{result["index"]}}-borrow').on('show.bs.modal', function (e) {
-                            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-                        });
-                    </script>
                 {% endfor %}
                 </tbody>
             </table>
@@ -211,19 +282,4 @@
         return temp;
     }
 
-    $(function () {
-        //得到当前时间
-        var date_now = new Date();
-        //得到当前年份
-        var year = date_now.getFullYear();
-        //得到当前月份
-        //注：
-        //  1：js中获取Date中的month时，会比当前月份少一个月，所以这里需要先加一
-        //  2: 判断当前月份是否小于10，如果小于，那么就在月份的前面加一个 '0' ， 如果大于，就显示当前月份
-        var month = date_now.getMonth() + 1 < 10 ? "0" + (date_now.getMonth() + 1) : (date_now.getMonth() + 1);
-        //得到当前日子（多少号）
-        var date = date_now.getDate() < 10 ? "0" + date_now.getDate() : date_now.getDate();
-        //设置input标签的max属性
-        $("#broDate").attr("min", year + "-" + month + "-" + date + 1);
-    })
 </script>
