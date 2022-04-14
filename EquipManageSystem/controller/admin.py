@@ -24,6 +24,7 @@ def admin_home(name):
     row = admins.find_admin_by_admnane(name)
     is_face = True
     session["admin"] = row.admname
+    session["admid"] = row.admid
     messnum = admin_message_num()
     return render_template("manager.html", person=row, messageNum=messnum, is_face=is_face, info="登陆成功!!")
 

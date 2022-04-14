@@ -104,7 +104,7 @@
                             {% if result["record"].Booking.is_agree == -1 %}
                                 <td class="center">待审核</td>
                                 <td class="center">
-                                    <button type="button" data-toggle="modal"
+                                    <button type="button" class="btn btn-danger" data-toggle="modal"
                                             data-href="{{ url_for("user.user_cancel",bid = result["record"].Booking.bid) }}"
                                             data-target="#{{ result["record"].Booking.bid }}cancel">取消预约
                                     </button>
@@ -146,7 +146,7 @@
                             {% elif result["record"].Booking.is_agree == 1 %}
                                 <td class="center">待归还</td>
                                 <td class="center">
-                                    <button type="button" data-toggle="modal"
+                                    <button type="button" class="btn btn-success" data-toggle="modal"
                                             data-href="{{ url_for("user.user_return",bid = result["record"].Booking.bid) }}"
                                             data-target="#{{ result["borrow"].bid }}Modal">归还
                                     </button>
