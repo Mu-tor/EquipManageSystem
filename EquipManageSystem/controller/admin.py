@@ -115,7 +115,21 @@ def download_table():
 @admin.route('/approval', methods=['GET', 'POST'])  # 审核
 def admin_approval():
     bookings = wait_process()  # 获取待处理事务
+    booking = Booking()
+    equip = Equipment()
     results = get_details(bookings)
+    # 对待审核事务进行处理 如有多人同时申请则同意一个后，其余应为不允许同意
+    for result in results:
+        if result['details'].is_addr == 1:  # 场地
+            if booking.find_book_by_date_addr(result['booking'].bro_time, result['details'].addrid) is None:
+                result.setdefault("disabled", "")
+            else:
+                result.setdefault("disabled", "disabled='disabled'")
+        else:  # 器材
+            if equip.find_eqp_by_id(result['details'].eqpid).num >= result['details'].bro_num:
+                result.setdefault("disabled", "")
+            else:
+                result.setdefault("disabled", "disabled='disabled'")
     return render_template("ProcessApprovals.html", results=results, admin=session.get('admin'))
 
 

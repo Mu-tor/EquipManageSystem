@@ -42,11 +42,11 @@ class Booking(db.Model):  # 预约表
         return row
 
     # 查询当前场地当前时间是否已被借用
-    def find_book_by_date_addr(self, date, addrid):
-        # 为 None即为可借
+    def find_book_by_date_addr(self, date, addrid, is_agree=1):
+        # 为 None即为可借,不为None即为不可同意
         row = db.session.query(Booking, Brodtl).join(Brodtl, Brodtl.bid == Booking.bid).filter(
             Booking.bro_time == date, Brodtl.addrid == addrid,
-            Booking.is_agree == 1).first()
+            Booking.is_agree == is_agree).first()
         return row
 
     # 添加

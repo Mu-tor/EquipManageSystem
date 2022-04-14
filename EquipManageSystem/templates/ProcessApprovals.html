@@ -144,9 +144,18 @@
                                     $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
                                 });
                             </script>
-                            <button type="button" class="btn btn-success" data-toggle="modal"
+                            <button type="button" class="btn btn-success " {{ result["disabled"] }} data-toggle="modal"
                                     data-href='{{ url_for("admin.admin_decision", bid=result["booking"].bid,deci='agree') }}'
-                                    data-target="#{{ result["booking"].bid }}agree">同意
+                                    data-target="#{{ result["booking"].bid }}agree">
+                                {% if result["disabled"]=="disabled='disabled'" %}
+                                    {% if result["details"].is_addr == 1 %}
+                                        当天场地已借用
+                                    {% else %}
+                                        该器材数量不足
+                                    {% endif %}
+                                {% else %}
+                                    同意
+                                {% endif %}
                             </button>
                         </td>
                         <!--
