@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,25 +13,22 @@
             padding: 0;
             margin: 0;
         }
-        
         html {
             height: 100%;
         }
-        
         body {
             background-image: linear-gradient(to bottom right, rgb(114, 135, 254), rgb(130, 88, 186));
         }
-        
         .login-container {
             width: 600px;
             height: 315px;
+
             margin: 0 auto;
             margin-top: 10%;
             border-radius: 15px;
             box-shadow: 0 10px 50px 0px rgb(59, 45, 159);
             background-color: rgb(95, 76, 194);
         }
-        
         .left-container {
             display: inline-block;
             width: 330px;
@@ -42,22 +38,18 @@
             padding: 22px;
             background-image: linear-gradient(to bottom right, rgb(118, 76, 163), rgb(92, 103, 211));
         }
-        
-         ::-webkit-input-placeholder {
+        ::-webkit-input-placeholder {
             color: rgb(199, 191, 219);
         }
-        
         .message-container {
             font-size: 14px;
             transition: .2s;
             color: rgb(199, 191, 219);
             cursor: pointer;
         }
-        
         .message-container:hover {
             color: #fff;
         }
-        
         .right-container {
             width: 145px;
             display: inline-block;
@@ -65,18 +57,15 @@
             vertical-align: top;
             padding: 27px 0;
         }
-        
         .regist-container {
             text-align: center;
             color: #fff;
             font-size: 18px;
             font-weight: 200;
         }
-        
         .regist-container span {
             border-bottom: 3px solid rgb(237, 221, 22);
         }
-        
         .action-container {
             font-size: 10px;
             color: #fff;
@@ -85,9 +74,7 @@
             top: 100px;
             left: 100px;
         }
-        
-        .action-container button,
-        .action-container a {
+        .action-container button,.action-container a {
             border: 1px solid rgb(237, 221, 22);
             background-color: rgba(0, 0, 0, 0.185);
             margin-left: 30px;
@@ -102,23 +89,19 @@
             transition: .2s;
             cursor: pointer;
         }
-        
-        .action-container a {
+        .action-container a{
             left: 20px;
         }
-        
-        .action-container button,
-        .action-container a:hover {
+        .action-container button,.action-container a:hover {
             background-color: rgb(237, 221, 22);
             color: rgb(95, 76, 194);
         }
-        
         table {
             color: #ffffff;
         }
+
     </style>
 </head>
-
 <body>
     <div class="login-container">
         <div class="left-container">
@@ -133,10 +116,10 @@
                         <th>发布者</th>
                     </tr>
                     {% for result in results %}
-                    <tr>
-                        <td>{{ result["notice"].content }}</td>
-                        <td>{{ result["admin"].admname }}</td>
-                    </tr>
+                        <tr>
+                            <td>{{ result["notice"].content }}</td>
+                            <td>{{ result["admin"].admname }}</td>
+                        </tr>
 
                     {% endfor %}
                 </table>
@@ -149,5 +132,4 @@
         </div>
     </div>
 </body>
-
 </html>
