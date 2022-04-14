@@ -115,29 +115,21 @@ document.getElementById("check").addEventListener('click', function () {
 document.getElementById("register").addEventListener("click", function () {
     if (!checkpwd())
         return
-    let uname = document.getElementById("uname").value
+    let uname = document.getElementById("name1").value
     let password = document.getElementById("password").value
-    let sex = $('input[name=sex]:checked').val();
-    let birthday = document.getElementById("birthday").value;
-    let tel = document.getElementById("tel").value;
+    let tel = document.getElementById("tel").value
+    let vcode = document.getElementById("uvcode").value
     //ajax发送校验
     $.ajax({
-        url: "/register_face",
+        url: "/register",
         type: "POST",
         dataType: 'json',
-        data: {"imgData": imgData, "uname": uname, "password": password, "sex": sex, "birthday": birthday, "tel": tel},
+        data: {"uname": uname, "password": password, "tel": tel, "vcode":vcode},
         success: function (data) {
             if (data.result == "fail") {
-                $("#result_tag").text("检测不出人脸");
+                alert("请勿重复注册！！");
             } else {
-                endRecognize(timer, error);
-                if (data.result == "repetition") {
-                    alert("请勿重复注册！！");
-                    $('#registerModal').modal('show');
-                } else {
-                    alert(uname + "注册成功！");
-                }
-                $('#faceModal').modal('hide');
+                alert(uname + "注册成功！");
             }
         }
     })
@@ -149,10 +141,14 @@ function checkpwd() {
     let pwd1 = $("input#password");
     let pwd2 = $("input#passwd2");
     let tel = $("input#tel");
-    let checkbox = $("input#checkbox").prop("checked");
+    let vcode = $("input#vcode");
     if (name.val() == "" || pwd1.val() == "") {
         alert("账号或密码不能为空！！")
         return false;
+    }
+    if(vcode.val()==""){
+        alert("验证码不能为空！！")
+        return false
     }
 
     if (pwd1.val() != pwd2.val()) {
@@ -162,10 +158,6 @@ function checkpwd() {
         return false;
     }
 
-    if (!checkbox) {
-        alert("请选中条款");
-        return false;
-    }
 
     if (!ValidatePhone(tel.val())) {
         alert("请输入正确的电话号码！！！");

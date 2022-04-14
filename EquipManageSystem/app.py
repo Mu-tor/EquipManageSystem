@@ -9,7 +9,6 @@ from io import BytesIO
 from flask import Flask, render_template, session, make_response, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:root@127.0.0.1:3306/laboratory?charset=utf8"
@@ -74,6 +73,28 @@ def logout():
     return render_template("index.html")
 
 
+@app.route("/register", methods=['post', 'get'])  # 注册
+def person_register():
+    from modules.users import Users
+    name = request.form.get("uname")
+    pwd = request.form.get("password")
+    tel = request.form.get("tel")
+    vcode = request.form.get("vcode").strip().lower()
+    svcode = session.get('vcode')
+    if svcode == vcode:
+        users = Users()
+        if users.find_user_by_uname(name) is None:
+            users.insert_user(name, pwd, tel)
+            result = "success"
+        else:
+            result = "fail"
+        return jsonify({"result": result})
+    else:
+        return render_template("login.html", info="验证码不正确")  # 根据返回显示验证码不正确
+
+
+
+
 @app.route("/login", methods=['post', 'get'])  # 登录
 def person_login():
     from modules.admins import Admins
@@ -81,57 +102,57 @@ def person_login():
     from modules.UserRecog import UserRecog
     users = Users()
     admins = Admins()
-    name = request.form["uname"]
-    pwd = request.form["pwd"]
+    name = request.form.get("uname")
+    pwd = request.form.get("pwd")
     is_adm = 0
     row = users.find_user_by_uname(name)
 
     # 管理员免密登录
-    row = admins.find_admin_by_admnane(name)  # 删除
-    session['islogin'] = 'true'  # 删除
-    session["admin"] = row.admname  # 删除
-    session["admid"] = row.admid
-    return render_template("manager.html", person=row, is_face=True, info="登陆成功!!")  # 删除
+    # row = admins.find_admin_by_admnane(name)  # 删除
+    # session['islogin'] = 'true'  # 删除
+    # session["admin"] = row.admname  # 删除
+    # session["admid"] = row.admid
+    # return render_template("manager.html", person=row, is_face=True, info="登陆成功!!")  # 删除
     # 用户免密登录
     # session["user"] = row.username  # 删除
     # session["uid"] = row.uid
     # session['islogin'] = 'true'  # 删除
     # return render_template("UserHome.html", person=row, is_face=True, info="登陆成功!!")  # 删除
 
-    # if row is None:  # 查询是否为管理员登录
-    #     is_adm = 1
-    #     row = admins.find_admin_by_admnane(name)
-    # m = hashlib.md5()
-    # m.update(pwd.encode("utf8"))
-    # vcode = request.form.get("vcode").strip().lower()
-    # if len(vcode) == 0:
-    #     return render_template("login.html", info="验证码为空")
-    # if row is not None:
-    #     svcode = session.get("vcode")
-    #     if svcode == vcode:
-    #         if m.hexdigest() == row.password:
-    #             is_face = False
-    #             if UserRecog().find_by_name(name) is not None:
-    #                 is_face = True
-    #             session['islogin'] = 'true'
-    #             if is_adm == 0:  # 用户登录
-    #                 session["user"] = row.username
-    #                 session["uid"] = row.uid
-    #                 messnum = user_message_num(row.uid)
-    #                 return render_template("UserHome.html", person=row, messageNum=messnum, is_face=is_face,
-    #                                        info="登陆成功!!")
-    #             else:  # 管理员登录
-    #                 session["admin"] = row.admname
-    #                 session["admid"] = row.admid
-    #                 messnum = admin_message_num()
-    #                 return render_template("manager.html", person=row, messageNum=messnum, is_face=is_face,
-    #                                        info="登陆成功!!")
-    #         else:
-    #             return render_template("login.html", info="密码错误!!")
-    #     else:
-    #         return render_template("login.html", info="验证码不正确")  # 根据返回显示验证码不正确
-    # else:
-    #     return render_template("login.html", info="用户不存在!!")
+    if row is None:  # 查询是否为管理员登录
+        is_adm = 1
+        row = admins.find_admin_by_admnane(name)
+    m = hashlib.md5()
+    m.update(pwd.encode("utf8"))
+    vcode = request.form.get("vcode").strip().lower()
+    if len(vcode) == 0:
+        return render_template("login.html", info="验证码为空")
+    if row is not None:
+        svcode = session.get("vcode")
+        if svcode == vcode:
+            if m.hexdigest() == row.password:
+                is_face = False
+                if UserRecog().find_by_name(name) is not None:
+                    is_face = True
+                session['islogin'] = 'true'
+                if is_adm == 0:  # 用户登录
+                    session["user"] = row.username
+                    session["uid"] = row.uid
+                    messnum = user_message_num(row.uid)
+                    return render_template("UserHome.html", person=row, messageNum=messnum, is_face=is_face,
+                                           info="登陆成功!!")
+                else:  # 管理员登录
+                    session["admin"] = row.admname
+                    session["admid"] = row.admid
+                    messnum = admin_message_num()
+                    return render_template("manager.html", person=row, messageNum=messnum, is_face=is_face,
+                                           info="登陆成功!!")
+            else:
+                return render_template("login.html", info="密码错误!!")
+        else:
+            return render_template("login.html", info="验证码不正确")  # 根据返回显示验证码不正确
+    else:
+        return render_template("login.html", info="用户不存在!!")
 
 
 @app.route('/login_face', methods=['post'])  # 人脸登录
