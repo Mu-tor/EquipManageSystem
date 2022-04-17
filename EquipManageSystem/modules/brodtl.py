@@ -11,19 +11,23 @@ class Brodtl(db.Model):  # 预约详情表
 
     def find_book_by_bid(self, bid):
         row = db.session.query(Brodtl).filter(Brodtl.bid == bid).first()
+        db.session.close()
         return row
 
     def find_all_by_eqpid(self, eqpid):
         row = db.session.query(Brodtl).filter(Brodtl.eqpid == eqpid).all()
+        db.session.close()
         return row
 
     def find_all_by_isaddr(self, is_addr):
         row = db.session.query(Brodtl).filter(Brodtl.is_addr == is_addr).all()
+        db.session.close()
         return row
 
     # 查询所有预约
     def find_all(self):
-        row = db.session.query(Brodtl).all();
+        row = db.session.query(Brodtl).all()
+        db.session.close()
         return row
 
     # 添加
@@ -31,6 +35,7 @@ class Brodtl(db.Model):  # 预约详情表
         n = Brodtl(bid=bid, eqpid=eqpid, addrid=addrid, is_addr=is_addr, bro_num=bro_num)
         db.session.add(n)
         db.session.commit()
+        db.session.close()
 
     # 修改
     def update_bro(self, bro):
@@ -40,3 +45,4 @@ class Brodtl(db.Model):  # 预约详情表
         self.is_addr = bro.is_addr
         self.bro_num = bro.bro_num
         db.session.commit()
+        db.session.close()

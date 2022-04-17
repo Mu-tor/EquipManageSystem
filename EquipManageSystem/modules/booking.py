@@ -13,32 +13,39 @@ class Booking(db.Model):  # 预约表
 
     def find_book_by_bid(self, bid):
         row = db.session.query(Booking).filter(Booking.bid == bid).first()
+        db.session.close()
         return row
 
     def find_all_by_uid(self, uid):
         row = db.session.query(Booking).filter(Booking.uid == uid).all()
+        db.session.close()
         return row
 
     def find_waitreturn_by_uid(self, uid):  # 查询用户待还
         row = self.find_all_by_uid(uid)
+        db.session.close()
 
     def find_all_by_username(self, username):  # 通过用户名查询借用的记录
         row = db.session.query(Booking, Users, Brodtl).join(Users, Users.uid == Booking.uid). \
             join(Brodtl, Brodtl.bid == Booking.bid).filter(
             Users.username == username).all()
+        db.session.close()
         return row
 
     def find_all_by_isagree_uid(self, is_agree, uid):  # 查询用户是否被同意借用的记录
         row = db.session.query(Booking).filter(Booking.is_agree == is_agree, Booking.uid == uid).all()
+        db.session.close()
         return row
 
     def find_all_by_isagree(self, is_agree):  # 查询所有是否被同意借用的记录
         row = db.session.query(Booking).filter(Booking.is_agree == is_agree).all()
+        db.session.close()
         return row
 
     # 查询所有预约
     def find_all(self):
         row = db.session.query(Booking).all()
+        db.session.close()
         return row
 
     # 查询当前场地当前时间是否已被借用
@@ -47,6 +54,7 @@ class Booking(db.Model):  # 预约表
         row = db.session.query(Booking, Brodtl).join(Brodtl, Brodtl.bid == Booking.bid).filter(
             Booking.bro_time == date, Brodtl.addrid == addrid,
             Booking.is_agree == is_agree).first()
+        db.session.close()
         return row
 
     # 添加
@@ -64,6 +72,7 @@ class Booking(db.Model):  # 预约表
         self.days = notc.days
         self.is_agree = notc.is_agree
         db.session.commit()
+        db.session.close()
 
     # 按预约编号取消预约
     def cancel(self, id):
@@ -73,3 +82,4 @@ class Booking(db.Model):  # 预约表
         w = Work().find_work_by_bid(id)
         w.is_deal = 1
         db.session.commit()
+        db.session.close()

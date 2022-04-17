@@ -8,21 +8,25 @@ class Notice(db.Model):  # 公告表
 
     def find_notice_by_notid(self, notid):
         row = db.session.query(Notice).filter(Notice.notid == notid).first()
+        db.session.close()
         return row
 
     # 按管理员找他发布的公告
     def find_all_by_admid(self, admid):
         row = db.session.query(Notice).filter(Notice.admid == admid).all()
+        db.session.close()
         return row
 
     # 按内容找
     def find_notice_by_content(self, ctn):
         row = db.session.query(Notice).filter(Notice.content == ctn).first()
+        db.session.close()
         return row
 
     # 查询所有公告
     def find_all(self):
-        row = db.session.query(Notice).all();
+        row = db.session.query(Notice).all()
+        db.session.close()
         return row
 
     # 添加
@@ -30,6 +34,7 @@ class Notice(db.Model):  # 公告表
         n = Notice(admid=admid, content=ctn)
         db.session.add(n)
         db.session.commit()
+        db.session.close()
 
     # 修改
     def update_notice(self, notc):
@@ -37,9 +42,11 @@ class Notice(db.Model):  # 公告表
         self.admid = notc.admid
         self.content = notc.content
         db.session.commit()
+        db.session.close()
 
     # 删除
     def delete(self, id):
         row = Notice().find_notice_by_notid(id)
         db.session.delete(row)
         db.session.commit()
+        db.session.close()

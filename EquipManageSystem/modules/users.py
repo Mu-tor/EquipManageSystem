@@ -10,10 +10,12 @@ class Users(db.Model):  # 用户表
 
     def find_user_by_id(self, uid):
         row = db.session.query(Users).filter(Users.uid == uid).first()
+        db.session.close()
         return row
 
     def find_user_by_uname(self, uname):
         row = db.session.query(Users).filter(Users.username == uname).first()
+        db.session.close()
         return row
 
     def insert_user(self, uname, password, tel, isout=1):
@@ -22,3 +24,4 @@ class Users(db.Model):  # 用户表
         user = Users(username=uname, password=m.hexdigest(), tel=tel, is_out=isout)
         db.session.add(user)
         db.session.commit()
+        db.session.close()

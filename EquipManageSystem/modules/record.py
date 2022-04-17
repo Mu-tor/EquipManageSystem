@@ -15,20 +15,24 @@ class Record(db.Model):  # 借用记录表
 
     def find_rec_by_bid(self, bid):
         row = db.session.query(Record).filter(Record.bid == bid).first()
+        db.session.close()
         return row
 
     def find_all_by_admid(self, admid):
         row = db.session.query(Record).filter(Record.admid == admid).all()
+        db.session.close()
         return row
 
     def find_all_by_isrtn(self, isrtn, uid):  # 查询用户归还状态
         row = db.session.query(Record, Booking).join(Booking, Booking.bid == Record.bid) \
             .join(Users, Users.uid == Booking.uid).filter(Users.uid == uid, Record.is_return == isrtn).all()
+        db.session.close()
         return row
 
     # 查询所有归还记录
     def find_all(self):
         row = db.session.query(Record).all()
+        db.session.close()
         return row
 
     # 管理员同意及驳回预约，添加至预约详情表,并将待处理事务改为已处理
@@ -50,6 +54,7 @@ class Record(db.Model):  # 借用记录表
         row.is_deal = 1  # 将待处理事务改为已处理
         db.session.add(row)
         db.session.commit()
+        db.session.close()
 
     # 修改日期和状态
     def update_rec(self, bid, remark, date, is_return=1):
@@ -59,3 +64,4 @@ class Record(db.Model):  # 借用记录表
         rec.is_return = is_return
         db.session.add(rec)
         db.session.commit()
+        db.session.close()

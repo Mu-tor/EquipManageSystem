@@ -93,8 +93,6 @@ def person_register():
         return render_template("login.html", info="验证码不正确")  # 根据返回显示验证码不正确
 
 
-
-
 @app.route("/login", methods=['post', 'get'])  # 登录
 def person_login():
     from modules.admins import Admins
