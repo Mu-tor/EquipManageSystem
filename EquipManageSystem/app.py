@@ -123,6 +123,10 @@ def person_login():
     m = hashlib.md5()
     m.update(pwd.encode("utf8"))
     vcode = request.form.get("vcode").strip().lower()
+    if len(name) == 0:
+        return render_template("login.html", info="用户名为空")
+    if len(pwd) == 0:
+        return render_template("login.html", info="密码为空")
     if len(vcode) == 0:
         return render_template("login.html", info="验证码为空")
     if row is not None:
